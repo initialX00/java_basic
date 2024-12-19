@@ -1,0 +1,196 @@
+제어문: 조건문(Condition), 반복문(Loop)
+
+
+//// 조건문 ////
+: 프로그램의 흐름을 제어할 수 있는 식
+
+-조건문의 종류
+ 1) if, else, else if
+ 2) switch, case, default
+ + continue, break
+
+1. if문
+  >>
+  if(조건식){
+	조건이 참일 떄 실행 코드
+  } else if(조건식) {
+	if 거짓, else if 참일 때 실행 코드
+  } else {
+ 	if 거짓, else if 거짓일 때 실행 코드
+  }
+  (else의 경우 생략할 수 있다.)
+
+	int age = 10;
+        	if (age > 19) {
+		System.out.println("성인입니다");
+	} else if (age > 13) {
+		System.out.println("청소년입니다");
+	} else {
+		System.out.println("미성년자입니다");
+	}
+        //실행될 코드 블럭에 코드가 하나의 구문이라면 { } 생략 가능하다.(하나의 세미콜론으로 묶인다면 생략가능)
+	if(age > 19) System.out.println("주류");
+	else if (age > 15) System.out.println("탄산");
+	else System.out.println("쥬스");
+
+
+2. switch조건문
+ 특정 변수의 값에 따라 실행할 코드 블록의 범위를 결정한다.
+ 비교할 변수와 case값을 비교하여 같은 값일 경우, 해당 블록부터 끝까지 실행한다.
+ break 키워드로 switch문이 종료된다.
+ >>
+  switch(조건 변수){
+	case 조건값1:
+                    실행 문장;
+                    break;
+	case 조건값2:
+                    실행 문장;
+	case 조건값3:
+                    실행 문장;
+	default:
+                    실행 문장;
+	(default의 경우 생략할 수 있다)
+	}
+
+	Scanner sc = new Scanner(System.in);
+	System.out.print("Chapter를 선택하세요 >> ");
+	int chapter = sc.nextInt();
+	switch(chapter){
+	      case 1:
+		System.out.println("자바 기본 문법");
+		break;
+      	      case 2:
+		System.out.println("자바 제어문");
+		break;
+       	      case 3:
+		System.out.println("자바 배열");
+		break;
+      	      default:
+		System.out.println("해당 챕터는 없습니다");
+	}
+	sc.nextLine(); // nextInt()의 개행 문자 처리
+
+	System.out.print("과일을 입력하세요 >> ");
+	String fruit = sc.nextLine();
+	switch(fruit){
+                case "banana":
+		System.out.println("바나나는 노랗다");
+		break;
+                case "strawberry":
+                	System.out.println("딸기는 빨갛다");
+                	break;
+                case "grape":
+                	System.out.println("포도는 보랗다");
+                	break;
+                default:
+                	System.out.println("해당 과일은 없습니다");
+        }
+        sc.close(); // 종료 까먹지 말기
+
+
+
+/// 반복문 ///
+: 특정 조건이 만족될 때까지 동일한 작업을 반복적으로 실행할 때 사용한다
+ -반복문의 종류
+   for, while, do-while
+
+1.for문
+  특정 조건이 만족될 때까지 코드 블럭을 반복 실행한다. 횟수가 정해져있는 경우 주로 사용한다.
+  >>
+  for (초기화; 조건; 증감) {
+	조건이 만족될 때 실행할 코드
+  }
+  cf) 초기화: 반복에 사용할 변수, for문 내에서만 유효하다(범위,스코프 내에서만 유효하다)
+      조건: 해당 조건이 참인동안 반복문이 실행된다
+      증감: 매 반복마다 변수를 증감한다
+
+	for(int num = 1; num <= 5; num++){
+	    System.out.print(num + " ");
+	}
+	//최종 출력 1 2 3 4 5
+
+
+1-1)중첩 반복문
+   >>
+   for () {
+       for () {
+ 	실행 코드;
+       }
+   }
+
+	System.out.println("===구구단===");
+	for (int i = 2; i <= 9; i++){
+                for(int j = 1; j <= 9; j++){
+		System.out.print(i + "X" + j + "=" + i * j+ " ");
+	    }
+	System.out.println();
+	}
+
+
+
+
+2.while문
+  일반적으로 반복 횟수가 지정되지 않았을 때 사용한다
+  조건을 검사하고 해당 조건이 true인 경우 코드 블록을 실행한다.
+  조건에 true를 작성할 경우 무한 루프한다.
+  >>
+  변수 초기화;
+  while (조건) {
+      	조건이 참일 때 실행
+	증감연산자;
+  }
+
+  무한반복될 때 'ctrl + f2' or '중단버튼'으로 멈춘다.
+
+	int num = 1;
+        	while(num <= 5) {
+                System.out.print(num + " ");
+                num++;
+        	}
+        	System.out.println();
+
+2-1) continue와 break문
+    while문에서 아래코드를 무시하고 다시 반복할 때 continue;
+    while문 코드블럭을 중단할 때 break;
+
+	//0부터 20까지 정수 중에서 홀수만 출력하시오
+        	int number = 0;
+        	while(true){
+                if(number == 20){
+		break;
+	    }
+                if(number % 2 == 0){
+		number++;
+		continue;
+                }
+                System.out.print(number + " ");
+                number++;
+	}
+        	System.out.println();
+
+
+3. do while문
+  while문과 비슷하지만 조건이 맞지 않더라도 최소 한번은 반드시 실행된다.
+  사용자 입력값을 반복적으로 받아 조건에 맞는 값을 처리할 때 유용하다.
+  >>
+  초기화;
+   do {
+	실행할 코드
+	증감연산자;
+  } while (조건);
+
+	//특정 값을 받을 때까지 반복
+        	Scanner sc = new Scanner(System.in);
+        	int n2;
+        	do{
+                System.out.print("1부터 10 사이의 숫자를 입력하시오 >> ");
+                n2 = sc.nextInt();
+        	} while(n2 < 1 || n2 > 10);
+        	System.out.println("입력한 숫자는 " + n2);
+        	sc.close();
+
+        //동일한 입력공간(System.in)을 여러번 여는 경우
+        //표준 입력 스트림을 닫고 재실행 할 때 에러가 발생한다
+        //운영체제 자원의 스트림이기때문에 한 번 닫으면 다시 열 수 없다.
+
+

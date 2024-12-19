@@ -1,0 +1,110 @@
+===========
+D2Coding
+코딩할때 추천 글꼴
+===========
+
+visual studio 자동저장 설정하기 file - auto save
+
+==================
+Maven 설정
+=================
+정품설치 후 설정
+Maven으로 프로젝트제작
+
+버전
+1.0.0
+주버전.부버전.수정버전
+
+pom.xml에서 버전 1.0.0으로 수정
+
+    <version>1.0.0</version>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.36</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <properties>
+
+
+
+
+설정 match case 해제 -> 대소문자 구분없이 자동완성
+inlay hints 모두 해제 -> 인텔리제이 전용 참조기능 끄기
+
+atom material icons 플러그인 설치 -> 아이콘 가시성 업
+progress 플러그인 -> 화면 꾸미기
+
+mouse control - wheel in : alleditors
+
+=================================
+
+
+
+
+
+
+
+
+========
+Gradle 설치
+========
+
+설정 - 플러그인 - Gradle 체크되있는지 확인하기.
+
+프로젝트에서 new File - build.gradle로 생성.
+
+==다음 입력 후 우측하단 Load Gradle 클릭===
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src']
+        }
+    }
+}
+
+
+===인코딩 완료 후===
+Project Strucure - Modules - Sources - 프로젝트 경로 클릭 - Mark as의 Sources 클릭.
+
+
+
+
+
+
+
+
+
+==============
+Lombok 설치
+==============
+
+설정 - 플러그인에서 Lombok 검색 후 설치
+
+build.gradle에서 입력하기.
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+}
+

@@ -1,0 +1,641 @@
+DTO (Data Transfer Object)
+ : 데이터 전송 객체
+ : 프로세스 간에 데이터를 전달하는 객체를 의미한다
+ : 계층간 데이터 전송을 위해 사용하는 객체
+
+
+
+
+=== 내부 클래스(Inner Class) / 중첩 클래스(Nested Class) ===
+: 다른 클래스 내부에 선언된 클래스를 의미한다
+
+1.장점
+  : 코드의 가독성을 향상시켜 코드의 구조 파악에 용이하다
+  : 클래스 간에 관계를 명확하게 하여 내부 클래스는 외부 클래스의 멤버(필드, 메서드)에 접근가능하다.
+
+2.종류 (암기하지 말고 알고만 있자)
+  1) (비정적) 내부 클래스 - 가장 기본적인 클래스의 형태
+    : 외부 클래스의 인스턴스에 속한다
+      외부 클래스의 인스턴스 변수 및 메서드에 직접 접근이 가능하다
+      >> 외부클래스타입.내부클래스타입 변수멸 = 외부인스턴스명.new 내부클래스();
+
+  2) 정적(static) 내부 클래스
+    : 외부 클래스의 정적 멤버에 속한다.
+      외부 클래스의 인스턴스 변수에 접근할 수 없다.
+      외부 클래스의 정적 멤버에만 접근 가능하다.
+      >>외부클래스타입.내부클래스타입 변수 = new 외부클래스명.내부클래스();
+
+  3) 메서드 내부 클래스 (지역 클래스)
+    : 메서드 내에 정의된 내부클래스를 말한다
+    : 해당 메서드 내에서만 사용이 가능하다.
+      메서드의 지역변수에만 접근이 가능하다.
+      cf)로컬 변수(외부클래스 멤버변수)가 final인 경우에만 접근 가능하다
+
+  4) 익명 (내부) 클래스 - anonymous : 익명의
+    : 이름이 없는 내부클래스
+    : 주로 인터페이스나 추상클래스의 구현에 사용된다
+      즉시 객체를 생성가능하고, 주로 클래스를 일회성으로 사용할 때 사용한다.
+
+
+	import java.lang.reflect.Method;
+
+	class OuterClass {
+	    private String outerField = "외부 클래스의 필드";
+	    static String staticField = "외부 클래스의 정적 필드";
+	    //1.비정적 내부 클래스 - 인스턴스 멤버처럼 사용한다
+	    class InnerClass {
+	        void display() {
+	            System.out.println("외부 클래스 필드에 접근: " + outerField);
+	        }
+	    }
+	    //2.정적 내부 클래스
+	    static class StaticClass {
+	        void display(){
+	            //외부 클래스의 인스턴스 변수에 접근이 불가
+	            //System.out.println("외부 클래스 필드에 접근 : " + outerField);
+	
+	            //외부 클래스의 정적변수 사용 시 클래스명. 생략 가능하다
+	            System.out.println("외부 클래스의 정적 필드에 접근 : " + staticField);
+	        }
+	    }
+	    //3.메서드 내부클래스(지역 클래스)
+	    void outerMethod() {
+	        String localVar = "메서드 로컬 변수"; //암묵적으로 final로 간주 (생략)
+	        final String localFinalVar = "메서드 로컬 변수(Final)";
+	
+	        class MethodClass {
+	            void display() {
+	                System.out.println("로컬변수에 접근(Final X) " + localVar);
+	                System.out.println("로컬변수에 접근(Final O) " + localFinalVar);
+	            }
+	        }
+	        System.out.println("외부클래스의 메서드를 호출");
+	        //로컬클래스의 인스턴스화
+	        //메서드 안에서만 쓰이기때문에 인스턴스화도 내부에서만 일어난다
+	        MethodClass methodClass = new MethodClass();
+	        methodClass.display();
+	    }
+	}
+	
+	//추상클래스 : 하나이상의 추상메서드를 포함
+	//cf) 추상메서드는 구현부{}가 없는 메서드이다
+	abstract class AbstractClass {
+	    abstract void display();
+	}
+	
+	//인터페이스
+	interface Greeting {
+	    void sayHello();
+	}
+	
+	public class A_Inner {
+	    public static void main(String[] args) {
+	        System.out.println("==비정적 내부클래스==");
+	        //1)외부 클래스의 인스턴스화
+	        OuterClass outerClass1 = new OuterClass();
+	        //2	)외부클래스.내부클래스 형식으로 내부 클래스를 생성
+	        //외부클래스타입.내부클래스타입 변수멸 = 외부인스턴스명.new 내부클래스();
+	        OuterClass.InnerClass innerClass = outerClass1.new InnerClass();
+	        innerClass.display(); //외부 클래스 필드에 접근: 외부 클래스의 필드
+	
+	        System.out.println();
+	        System.out.println("==정적 내부클래스==");
+	        //1)외부 클래스 인스턴스화가 불필요하며, 클래스를 통한 내부 클래스 생성이 가능하다
+	        //외부클래스타입.내부클래스타입 변수 = new 외부클래스명.내부클래스();
+	        OuterClass.StaticClass staticClass = new OuterClass.StaticClass();
+	        staticClass.display(); //외부 클래스의 정적 필드에 접근 : 외부 클래스의 정적 필드
+	
+	        System.out.println();
+	        System.out.println("==메서드 내부클래스(지역클래스)==");
+	        OuterClass outerClass2 = new OuterClass();
+	        outerClass2.outerMethod();
+	        //외부클래스의 메서드를 호출
+	        //로컬변수에 접근(Final X) 메서드 로컬 변수
+	        //로컬변수에 접근(Final O) 메서드 로컬 변수(Final)
+	
+	        System.out.println();
+	        System.out.println("==익명 (내부) 클래스===");
+	        //클래스타입 변수명 = new 클래스명() {메서드 구현 - 추상클래스, 인터페이스의 추상메서드}
+	        AbstractClass abstractClass1 = new AbstractClass() {
+	            @Override
+	            void display() {
+	                System.out.println("익명 내부 클래스");
+	            }
+	        }; //메서드취급이기에 ;으로 끝이난다
+	        AbstractClass abstractClass2 = new AbstractClass() {
+	            @Override
+	            void display() {
+	                System.out.println("두번쨰 익명 내부 클래스");
+	            }
+	        };
+	        abstractClass1.display();
+	        abstractClass2.display();
+	        System.out.println(abstractClass1 == abstractClass2); //싱글톤과는 다르다
+	
+	        //인터페이스 사용 익명 클래스
+	        System.out.println("==인터페이스 사용 익명클래스==");
+	        Greeting greeting = new Greeting() {
+	            @Override
+	            public void sayHello() {
+	                System.out.println("안녕하세요. 인터페이스 익명클래스입니다");
+	            }
+	        };
+	        greeting.sayHello(); //안녕하세요. 인터페이스 익명클래스입니다
+	    }
+	}
+
+
+
+
+
+
+
+
+
+=== 익명 (내부,중첩) 클래스===
+ : 클래스를 정의하면서 동시에 인스턴스화가 이루어지는 방법이다.
+ - 이름이 없기때문에 제사용이 불가하다. 1회성 객체 정의에 유용하다.
+
+//cf)람다 표현식으로 변환 가능한 인터페이스는 '함수영 인터페이스'로 단 하나의 추상 메서드만을 가져야한다.
+
+	//1.인터페이스 구현예시
+	interface Animal {
+	    void sound(); //추상메서드 - 구현{}이 없는 메서드
+	    //cf)람다 표현식으로 변환 가능한 인터페이스는 '함수영 인터페이스'로 단 하나의 추상 메서드만을 가져야한다.
+	}
+
+	//인터페이스를 구현한 클래스 - 재사용이 가능하다
+	class dog implements Animal {
+	    @Override
+	    public void sound() {
+	        System.out.println("멍멍");
+	    }
+	}
+
+	//2.추상클래스
+	abstract class Vehicle { //vehicle 운송수단,탈것
+	    abstract void run(); //추상메서드
+	}
+	//추상클래스 - 반환 타입이 String
+	abstract class Person {
+	    abstract String getName();
+	}
+
+
+	public class A_Anoymous {
+	    public static void main(String[] args) {
+	        Animal dog1 = new Animal(){ //재사용 불가
+	            @Override
+	            public void sound() {
+	                System.out.println("멍멍");
+	            }
+	        };
+	        dog1.sound();
+
+	        Animal dog2 = new Animal() {
+	            @Override
+	            public void sound(){
+	                System.out.println("멍멍");
+	            }
+	        };
+	        dog2.sound();
+
+	        //추상메서드
+	        Vehicle car = new Vehicle() {
+	            @Override
+	            void run() {
+	                System.out.println("자동차가 달립니다");
+	            }
+	        };
+
+	        //추상메서드 - 반환타입 String
+	        Person person = new Person() {
+	            @Override
+	            String  getName() {
+	                return "이승아";
+	            }
+	        };
+	        System.out.println(person.getName());
+	    }
+	}
+
+
+
+
+
+
+
+
+
+==== 람다 표현식 (Lambda Expression) ========
+: 자바 8에서 도입된 함수형 프로그래밍 스타일의 표현식을 말한다
+- 간결성, 함수형 프로그래밍의 지원 등의 특징을 가진다
+- 익명 클래스를 대체하여 코드의 가독성 향상에 기여한다
+
+  cf) 함수형 인터페이스
+    : 단 하나의 추상 메서드만 가지는 인터페이스
+    : @FunctionalInterface 어노테이션
+    - 디폴트 메서드, 정적 메서드는 포함 가능하다
+
+
+1.람다식 기본 형태
+: (params) -> {실행문}
+ 1)매개변수(params) : 함수형 인터페이스에서 메서드와 동일한 매개변수를 사용
+ 2)화살표 연산자(->) : 매개변수와 실행문(바디)을 구분
+ 3)바디 : 메서드의 구분
+
+ cf) 일반 메서드(함수)
+    반환타입 메서드명(params) {실행문}
+
+
+
+2.예시
+ 1)매개변수, 반환값이 모두 없는 람다
+        () -> System.out.println("Hello, Lambda");
+ 2)매개변수가 하나인 람다 (매개변수 자리의 괄호 생략가능)
+        x -> x * x;
+ 3)매개변수가 두개 이상인 람다
+        (a,b) ->  a + b;
+ 4)실행문이 두줄 이상인 람다
+    : 두줄 이상인 경우 return키워드를 사용하여 값을 반환해야한다.
+        () -> {
+                System.out.println("Hello, Lambda");
+                return "Hello";
+        }
+
+
+3.함수형 인터페이스
+ 1) Predicate<T>: boolean test<T t>
+    - 주어진 조건을 테스트
+    - String API와 결합되어 쓰인다.
+ 2) Function<T, R>: R apply(T t)
+    - 입력값(T)을 다른 타입(R)으로 변환
+ 3) Consumer<T>: void accept(T t)
+    - 입력값을 소비
+ 4) Supplier<T>: T get()
+    - 값을 반환
+
+
+4.메서드 참조
+ : 함수형 인터페이스를 간결하게 표현해준다
+ - :: 연산자를 사용하여 기존 메서드를 참조한다
+
+
+	import java.util.ArrayList;
+	import java.util.List;
+
+	@FunctionalInterface
+	interface MyFunctionalInterface {
+	    void doSomething();
+	    //void anotherDoSomething(); - @FunctionalInterface는 하나의 추상메서드만을 가진다
+	}
+
+	//람다식 사용예제
+	//1)기본 표현 : 여러개의 매개변수, 하나의 실행문
+	interface Calculator {
+	    int add(int a, int b);
+	}
+
+	//2)매개변수가 없는경우
+	@FunctionalInterface
+	interface NoParams{
+	    void sayHello();
+	}
+
+	//3) 매개변수가 한개인 경우 : 소괄호 생략 가능
+	@FunctionalInterface
+	interface OneParam{
+	    void print(String message);
+	}
+
+	//4)실행문이 여러줄인 경우 : 중괄호 작성
+	@FunctionalInterface
+	interface  Operation{
+	    void operation(int a, int b);
+	}
+
+	//5)반환값이 있는 경우
+	@FunctionalInterface
+	interface StringLength {
+	    int getLength(String str);
+	}
+
+	public class D_Lambda {
+	    public static void main(String[] args) {
+	        MyFunctionalInterface myFunctionalInterface = () -> System.out.println("안녕");
+	        myFunctionalInterface.doSomething(); //안녕
+
+	        //익명클래스 방식
+	        Calculator calculator1 = new Calculator() {
+	            @Override
+	            public int add(int a, int b) {
+	                return a + b;
+	            }
+	        };
+	        System.out.println("익명클래스 결과 : " + calculator1.add(3, 5)); //익명클래스 결과 : 8
+
+	        //람다식 방식
+	        //1)기본방식
+	        Calculator calculator2 = (a, b) -> a + b;
+	        System.out.println("람다식 결과 : " + calculator2.add(3, 5)); //람다식 결과 : 8
+	        //2)매개변수가 없는 방식
+	        NoParams noParams = () -> System.out.println("안녕하세요");
+	        //3)매개변수가 한개인 방식
+	        OneParam oneParam =  message -> System.out.println("출력메세지 : " + message);
+	        oneParam.print("안녕"); //출력메세지 : 안녕
+	        //4)출력문이 여러줄인 방식
+	        Operation operation = (a, b) -> {
+	            System.out.println("합 : " + (a + b)); //합 : 3
+	            System.out.println("차 : " + (a - b));  //차 : -1
+	        };
+	        operation.operation(1, 2);
+	        //5)반환값이 있는경우
+	        StringLength stringLength =  str -> str.length();
+	        System.out.println("문자열 길이 : " + stringLength.getLength("Lambda")); //문자열 길이 : 6
+	        //cf)여러 줄의 코드가 실행문에 작성될 경우 return 필요
+	
+	        List<Integer> numbers = new ArrayList<>();
+	        numbers.add(1);
+	        numbers.add(2);
+	        numbers.add(3);
+	        System.out.print(numbers); //[1, 2, 3]
+	        System.out.println();
+	
+	        for (Integer num : numbers) {
+	            System.out.print(num); //123
+	        }
+	        System.out.println();
+	
+	        //입력값을 받아 소비(출력 & 상태변경)하는데 사용
+	        numbers.forEach(num -> System.out.print(num)); //123
+	    }
+	}
+
+
+
+
+
+
+
+
+
+메서드 참조( :: 연산자 )
+ : 람다 표현식을 더 간결하게 작성할 수 있도록 지원하는 문법
+ : 단순히 메서드 호출만하는 경우에 사용한다.
+
+  1. 정적 메서드 참조 (ClassName::staticMethod)
+  2. 인스턴스 메서드 참조 (instance::instanceMethod)
+  3. 생성자 참조(ClassName::new)
+  4. 임의 객체 인스턴스 메서드 참조 (ClassName::instanceMethod)
+
+
+	//1.정적메서드 참조
+	class StaticMethod {
+	    static void printUpperCase(String str) {
+	        System.out.println(str.toUpperCase());
+	    }
+	}
+
+	//2.인스턴스 메서드 참조
+	class InstanceMethod {
+	    void printLowerCase(String str) {
+	        System.out.println(str.toLowerCase());
+	    }
+	}
+
+	//3.특정 객체의 인스턴스 참조
+	class Calculator {
+	    int add(int a, int b) {
+	        return a + b;
+	    }
+	}
+
+	//4.생성자 참조
+	class Human {
+	    private String name;
+	    public Human() {
+	        this.name = "Unknown";
+	    }
+	    public String getName() {return name;}
+	}
+
+	public class C_Method_Ref {
+	    public static void main(String[] args) {
+	        //1.정적 메서드 참조 예시
+	        //클래스명::정적메서드명
+	        List<String> fruits = Arrays.asList("apple", "mango", "banana");
+	        fruits.forEach(StaticMethod::printUpperCase);  //APPLE  MANGO  BANANA
+
+	        //2.인스턴스 메서드 참조 예시
+	        //인스턴스명::인스턴스메서드명
+	        InstanceMethod instanceMethod = new InstanceMethod();
+	        List<String> fruits2 = Arrays.asList("APPLE", "MANGO", "BANANA");
+	        fruits2.forEach(instanceMethod::printLowerCase); //apple  mango  banana
+	
+	        //3.특정 객체의 인스턴스 참조 예시
+	        Calculator calculator = new Calculator();
+	        //cf) BiFunction : 2개의 인자를 받고 1개의 객체를 리턴시키는 함수형 인터페이스
+	        //      BiFunction<T,U,R>
+	        BiFunction<Integer, Integer, Integer> addition = calculator::add;
+	        int result = addition.apply(5,3);
+	        int result2 = addition.apply(15,13);
+	        System.out.println(result);  //8
+	        System.out.println(result2);  //28
+	
+	        //4.생성자 참조 예시
+	        Supplier<Human> humanSupplier = Human::new; //(= new Human() ) 클래스이름으로 호출 -> 정적메서드
+	        Human human1 = humanSupplier.get();
+	        Human human2 = humanSupplier.get();
+	        Human human3 = humanSupplier.get();
+	        System.out.println(human1.getName());  //Unknown
+	    }
+	}
+
+
+
+===== function 패키지 =====
+1.Predicate
+ : 입력값을 받아 조건을 검사하는데 사용한다
+ : 메서드
+ - boolean test(T t): 주어진 입력값이 조건을 만족하면 true를 반환, 그렇지 않으면 false 반환
+ - and(Predicate other), or(Predicate other), negate() : Predicate 조합을 위해 사용한다
+    cf)negate : 부정하다
+
+
+2.Function
+ : 입력 값을 받아 특정 연산을 수행한 후 결과를 반환
+ : 메서드
+  - R apply(T t): 입력값을 받아 반환한 값을 반환
+  - andThen(Function after) : 현재 결과를 다른 Function의 입력으로 연결
+  - compose(Function before) : 다른 Function의 결과를 현재 입력으로 연결
+
+  cf)Function
+    <T,R> Type parameters
+    <T> – the type of the input to the function
+    <R> – the type of the result of the function
+
+
+3.Consumer
+ : 입력값을 받아 소비(출력 또는 상태변경)하는데 사용한다
+ : 메서드
+  - void accept(T t) : 입력값을 소비
+  - andThen(Consumer after) : 연속적인 소비 작업을 위해 사용
+
+
+4.Supplier
+ : 값을 공급(생성)하는데 사용, 입력 값이 필요로 하지 않는다
+ : 외부에서 값을 가져오거나, 데이터를 생성하여 반환하는 역할
+        - T get() : 반환
+
+
+
+
+	//자바의 함수형 인터페이스를 보관하고있는 패키지
+	import java.util.HashMap;
+	import java.util.Map;
+	import java.util.function.*;
+
+	public class E_Lambda {
+	    public static void main(String[] args) {
+	        //인터페이스명<T,U> 메서드명 = T타입매개변수,U타입매개변수 -> 실행문
+	        //: 해당 람다 내에서 다양한 타입을 활용
+	        Predicate<Integer> isEven =  n -> n % 2 == 0;
+	        Predicate<Integer> isPositive = n -> n > 0;
+	
+	        //기본 조건 검사
+	        System.out.println(isEven.test(4)); //true
+	        System.out.println(isEven.test(5)); //false
+
+	        //조건 결합
+	        Predicate<Integer> isEvenAndPositive = isEven.and(isPositive);
+	        System.out.println(isEvenAndPositive.test(4)); //true
+	        System.out.println(isEvenAndPositive.test(-4)); //false
+	
+	        //Function
+	        //<T,R> Type parameters
+	        //<T> – the type of the input to the function
+	        // <R> – the type of the result of the function
+	        Function<String, Integer>  stringLength = s -> s.length();
+	        Function<Integer, Integer> square = n -> n * n;
+
+	        System.out.println(stringLength.apply("Hello")); //5
+
+	        Function<String, Integer> lengthAndSquare = stringLength.andThen(square);
+	        System.out.println(lengthAndSquare.apply("Hello")); //25
+	
+	        //Consumer
+	        Consumer<String> printMessage = msg -> System.out.println(msg);
+	        Consumer<String> printLength = msg -> System.out.println(msg.length());
+	
+	        printMessage.accept("안녕하세요 :)"); //안녕하세요 :)
+	
+	        Consumer<String> combinedConsumer = printMessage.andThen(printLength);
+	        combinedConsumer.accept("안녕하세요 :)"); //안녕하세요 :)   8
+	
+	        //Supplier
+	        Supplier<Double> randomValue = () -> Math.random();
+	        System.out.println(randomValue.get());
+
+
+	        //Map활용 람다식
+	        Map<String, Integer> scores = new HashMap<>();
+	        scores.put("이씨", 85);
+	        scores.put("김씨", 90);
+	        scores.put("최씨", 100);
+
+	        scores.forEach((name, score) -> System.out.println(name + " : " + score));
+	    }
+	}
+
+
+
+
+
+
+스트림 API
+ : (컬렉션) 데이터의 처리를 선언적으로 작성할 수 있도록 지원하는 도구
+ - 데이터를 필터링, 변환, 집계 등의 작업
+ - 람다 표현식과 결합하여 직관적이며 간결한 코드 작성
+
+==특징==
+ : 컬렉션(Collection) 데이터를 간결하고 효율적으로 처리
+ : 데이터 필터링, 매핑, 축소 등의 작업 용이
+ : 함수형 프로그래밍 기법과 함께 사용
+
+ 1. 데이터 파이프 라인
+   : 스트림은 데이터를 소스로부터 연속적으로 처리하는 파이프라인을 구축
+ 2. 데이터 변경 X (불변성)
+   : 스트림은 원본 데이터 변경 X, 새로운 값을 반환
+ 3. 지연처리
+   : 중간 처리가 지연되어 최종 처리가 호출될 때 한번에 처리
+
+==스트림 API의 기본 구성 요소==
+1. 소스(Source)
+ : 스트림 생성 단계
+ - 컬렉션, 배열 또는 파일을 소스로 사용
+
+2. 중간 연산
+ : 데이터를 필터링, 매핑(변환)하는 과정
+ - 연산을 연속적으로 사용가능
+ - 스트림은 새로운 스트림을 반환
+  ex) filter, map, sorted 등
+
+3. 최종 연산
+ : 모든 데이터를 처리한 후 결과를 반환하거나 출력하는 연산
+  ex) collect, forEach, count 등
+
+
+	import java.util.ArrayList;
+	import java.util.Arrays;
+	import java.util.List;
+	import java.util.stream.Collectors;
+	import java.util.stream.Stream;
+
+	public class G_Stream {
+	    public static void main(String[] args) {
+	        List<String> names = new ArrayList<>();
+	        names.add("이씨");
+	        names.add("최씨");
+	        names.add("권씨");
+	        names.add("백씨");
+	        names.add("이이씨");
+	        System.out.println(names); //[이씨, 최씨, 권씨, 백씨]
+	
+	        //1. 데이터 소스(Stream 생성)
+	        //데이터.stream()
+	
+	        //2. 중간 연산
+	        //: filter(조건에 맞는 요소만 선택), map(요소를 변환), sorted(요소 정렬),
+	        // distinct(중복 제거), limit(처음부터 지정된 개수만큼 선택), skip(처음부터 지정된 개수만큼 건너뜀) 등
+
+	        //3. 최종 연산
+	        //: forEach(각 요소를 처리), collect(요소를 변환하여 컬레션으로 반환),
+	        // reduce(모든 요소를 하나의 값으로 줄임), count(요소의 개수를 반환) 등
+
+	        names.stream()
+	                .map(name -> name + "님") //님 붙이기
+	                .filter(name -> name.startsWith("이")) //이 골라내기
+	                //.forEach(name -> System.out.println(name)); //각 요소 출력
+	                .forEach(System.out::println); //instance::instanceMethod 인스턴스 메서드 참조
+
+	        //Arrays.asList();
+	        //: 일반 배열을 ArrayList로 반환
+	        List<Integer> numbers = Arrays.asList(1,2,3,4,5);
+	        List<Integer> newNumbers = numbers.stream()
+	                .map(n -> n * n)
+	                .collect(Collectors.toList());
+
+	        System.out.println(numbers); //[1, 2, 3, 4, 5]
+	        System.out.println(newNumbers); //[1, 4, 9, 16, 25]	
+
+	        //cf) .stream()으로 생성된 스트림은 일회성으로만 사용 가능하다
+	        //      : 메서드 체이닝 가능
+	        //      : 스트림으로 생성된 데이터를 다시 스트림으로 변경 불가능하다
+	//        Stream<Integer> stream = newNumbers.stream();
+	//        stream.map(n -> n * n)
+	//                .collect(Collectors.toList());
+	//        stream.filter(n -> n % 2 == 0)
+	//                .collect(Collectors.toList());
+	        //스트림을 재사용하는 경우 예외발생 : IllegalStateException
+	    }
+	}

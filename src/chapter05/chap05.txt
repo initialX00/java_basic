@@ -1,0 +1,378 @@
+
+=== 자바 지향 프로그래밍 ===
+- '클래스(class)'란 객체를 생성하기 위한 템플릿을 말한다.
+- '클래스'의 구조로는 필드, 메서드, 생성자가 있다.
+
+1. 클래스의 필드
+ : 클래스의 특성이 담긴 속성
+
+2. 클래스의 메서드
+ : 클래스 내부에서 필드를 사용하거나 특정 작업을 수행하는 코드 블럭이다.
+ - 클래스 내부에서 정의된 함수이다.
+ - 객체가 수행할 수 있는 동작을 정의한다.
+ - 프로그램의 재사용성과 가독성을 높이는 역할을 한다.
+
+3. 클래스의 생성자
+
+
+
+=== 메서드의 구조 ===
+선언 >> ReturnType methodName(parameter List){
+	메서드의 기능, 동작 정의;
+           }
+호출 >> 객체명.메서드명(인자);
+ 
+1.ReturnType(반환 유형)
+ : 메서드가 작업을 수행한 후 반환하는 데이터의 유형을 지정
+   반환 유형이 없는 경우 void로 지정한다.
+
+2.methodName(메서드 이름)
+: 메서드를 식별하는 이름
+  (권장) 동사를 사용하여 메서드의 작업을 설명한다.
+  명명 규칙 - lowerCamelCase
+  ex) "먹다" - eat(동사 ㅇ), eating(명사 X)
+
+3.Parameter List(매개변수 목록)
+ : 메서드에 전달되는 입력 값들의 목록
+   0개 이상으로 지정한다. (지정하지 않을 수 있음)
+   각 매개변수는 자료형과 함께 선언하여, 메서드 내부에서 지역변수로 사용된다.
+   일반 변수 정의처럼 동일한 데이터타입이더라도 생략이 불가능하다.
+
+	class Calculator{
+	   //클래스의 필드
+	    int a, b;
+	   //클래스의 메서드
+	    int addNumbers (int a, int b){ // 지역변수는 생략하여 선언 불가능
+	       return a + b;
+	    }
+	}
+
+
+
+
+
+=== 함수(Function)와 메서드(Method) ===
+1.함수
+ : 특정 작업을 수행하는 코드 블럭
+ - 독립적인 존재, 클래스 소속이 아니다
+ - '함수명();'으로 직접 호출이 가능하다
+ - Python, JavaScript에서 사용된다
+
+2.메서드
+ : 객체의 동작을 정의한 코드 블럭, 함수의 체계를 가졌다.
+ - 클래스 내부에 포함되어 객체와 관련되어있다.
+ - 객체 생성 후 '.연산자'를 통해 호출한다.
+ - Java, C# 등 클래스 기반 언어에서 사용된다.
+
+ cf)자바에서의 함수
+  - 자바는 객체 지향 프로그래밍 언어로, 모든 함수는 '클래스'에 속해 있어야한다.
+
+	public class Method01 {
+	    public static void main(String[] args) {
+	        //객체 생성
+	        Calculator calculator = new Calculator(); 
+	        //메서드 호출과 출력
+	        System.out.println(calculator.addNumbers(10,20));
+	     }
+	}
+
+
+
+
+
+메서드(Method)
+: 특정 작업을 수행하는 일련의 문장들을 하나로 묶은 것을 말한다.
+  어떤 값들을 입력하면 해당 값들로 작업을 수행하여 결과를 반환한다.
+    
+=== 메서드의 구조 ===
+: 선언부, 구현부
+: 메서드를 "정의한다" = 선언부와 구형부를 작성한다.
+ >> 반환타입 메서드명() {}
+ - 선언부: 반환타입 메서드명()
+ - 구현부: { 메서드 호출 시 수행될 코드 }
+
+1. 메서드 선언부
+ : '반환타입', '메서드명', '매개변수 선언'
+  1) 반환타입(return type)
+   - 메서드의 작업 수행 결과인 반환값의 타입을 명시해야한다.
+   - void는 반환값이 없는 경우 작성한다.
+  2) 매개변수(parameter) 선언
+   - 메서드가 작업을 수행하는데 필요한 값들을 제공받기 위한 것
+   - 필요한 값의 개수만큼 변수를 선언하고, 데이터 타입과 변수명을 쉽표(,)로 구분하여 나열한다
+     일반 변수와 달리 변수 선언 시 변수들의 데이터 타입이 같더라도 생략이 불가능하다.
+    
+2. 메서드의 구현부
+ : 메서드 선언부 다음에 오는 중괄호 {}를 말한다.
+   반환타입이 void가 아닐 경우 return문을 반드시 포함해야한다
+  - 해당 반환 값은 반환타입과 일치하거나 자동 형 변환이 가능한 데이터여야 한다.
+	double addDouble(int a, int b){
+		return a + b;
+	}
+
+3. 지역변수(local variable)
+ : 메서드 내에 선언된 변수
+ - 해당 메서드 내에서망 사용 가능하다
+ - 매개변수뿐만 아니라 구현부 내에서 작성된 변수도 지역변수 취급한다.
+
+	class Example{
+	    int x, y;
+	    int add(int x, int y){  //매개변수 x,y
+	        int result = x + y;  //double로 선언 시 자동 형 변환이 불가하여 오류
+	        return result;
+	    }
+	    double multiplay(int x, int y){
+	        int result = x + y; //자동 형 변환 가능하여 오류가 안 남
+	        return result;
+	    }
+
+	    //매개 변수와 반환값이 없는 경우
+	    void print99dan() {
+	        for(int i = 1; i < 10; i++){
+	            for(int j = 1; j < 10; j++){
+	                System.out.print(j * i + " ");
+	            }
+	            System.out.println();
+	        }
+	    }
+	}
+
+
+
+
+/// 함수의 파라미터에 데이터 전달 ///
+ : 함수 호출 시 ()영역 내에서 parameter에 전달되는 값을 argument라고 부른다.
+
+매개변수(Parmeter)와 인자(인수, Argument)
+1.매개변수
+ - 메서드를 정의할 때 괄호 안에 선언되는 '변수'
+ - 메서드가 호출될 떄 값을 전달받기 위한 입력변수로 사용한다.
+ - 메서드의 선언부에 정의, 호출 시 전달받은 값은 내부적으로 사용된다
+ - 클래스 필드를 사용하여 매개변수를 사용하지 않을 수도 있다.(인스턴스 메서드)
+
+2.인자(인수)
+ - 메서드를 호출할 떄 괄호 안에 전달하는 '값'
+ - 호출된 메서드의 매개변수에 실제 값을 전달한다.
+ - 메서드의 호출부에서 전달, 매개변수에 전달되어 메서드 안에서 사용된다.
+
+	public class Method02 {
+	    public static void main(String[] args) {
+	        Example example =new Example();
+	        example.print99dan();
+
+	        System.out.println(example.add(10,20));  //인자 10, 20
+	        //example.add(10,20,30); 인자값의 수는 매개변수의 수와 같아야한다
+	        //example.add("10","20"); 인자값은 매개변수의 타입과 같거나 자동 형 변환이 가능해야한다.
+	        System.out.println(example.add('a','b')); // char타입(2)여서 자동 형 변환이 이루어진다.
+	    }
+	}
+
+ cf)인자값과 매개변수의 관계
+  - 자바는 값에 의한 호출 방식을 사용한다
+  - 메서드 호출 시 인자값이 매개변수에 복사되어 전달된다.
+    따라서 인자값 기입 시에는 문제가 없지만 메서드 처리 시 오류가 생길 수 있다.
+
+
+ cf) return문
+  : 현재 실행 중인 메서드를 종료하고 호출한 메서드로 돌아간다
+   반환값 유무에 상관없이 반드 시 존재한다.
+   void 문이여도 생략되어 존재한다.
+
+	    void noReturn(){
+	        System.out.println("해당 메서드는 반환값이 없습니다.");
+	        //return;
+	        //자바 컴파일러가 반환타입을 읽고 해당 메서드의 마지막에 자동으로 return;을 추가한다.
+	    }
+	    String yesReturn() {
+ 	       String name = "이승아";
+ 	       return name;
+ 	       //반환 타입이 void가 아닌 경우 반드시 해당 타입의 값이 return 뒤에 작성되어야한다.
+	    }
+
+	    //조건에 따른 반환값을 지정
+	    int max(int a, int b){
+	        if(a > b){ //괄호당 구문 하나이므로 괄호 생략 가능
+	            return a;
+	        } else{
+	            return b;
+	        }
+	    }
+	    //삼항연산자를 사용하여 최소값을 반환하기
+	    int min(int a, int b){
+	        return a > b ? b : a;  //삼항연산자 >> 조건식 ? 참일때 값 : 부정일떄 값;
+	    }
+
+	public class Method03 {
+	    public static void main(String[] args) {
+	        MyMath myMath = new MyMath();
+
+	        System.out.println(myMath.add(10,3));
+	        System.out.println(myMath.subtract(10,3));
+	        System.out.println(myMath.multiply(10,2));
+	        //System.out.println(myMath.divide(10,0));
+	        // 복사되어 전달되기에 인자값은 오류가 없지만 계산에서 오류가 난다.
+	        // 자바에서는 정수형에서 0으로 나누면 오류가 난다, 실수형에서는 오류가 나지 않는다.
+	        System.out.println(myMath.divide2(10,0)); //오류 처리
+
+	        //메서드의 호출
+	        System.out.println(myMath.max(11,14));
+
+
+
+
+
+클래스의 "필드"
+: 인스턴스 필드와 정적(클래스,static) 필드로 나뉜다.
+      
+=== 정적 메서드 ===
+: 클래스의 "메서드" 또한 인스턴스 메서드와 정적 메서드로 나뉜다.
+- 인스턴스 메서드 : 객체(인스턴스)를 생성한 후 호출할 수 있는 메서드
+- 정적(static) 메서드 : 객체 생성 없이 호출 가능한 메서드
+    
+1. 정적 메서드란
+ : static 키워드를 메서드 앞에 붙여 정의된 메서드
+  클래스의 이름으로 직접 호출이 가능하다.
+    
+2.정적 메서드의 사용법
+ 선언시 >> static 반환타입 메서드명() {}
+ 호출시 >> 클래스명.메서드명();
+    
+3.정적 메서드의 특징
+ - 인스턴스 변수에 의존하지 않는다
+ - 클래스 수준에서 공유되는 데이터를 다룰 때 적합하다. (정적 필드 활용 등)
+    
+4.정적 메서드 사용 권장 사항
+ - 공통 데이터 사용 : 모든 인스턴스에서 공유되는 데이터를 다룰 때
+ - 독립적인 사용 : 인스턴스 변수와 관계없이 매개변수만으로 작업을 처리할 때
+
+
+  cf)파일명 클래스에서의 static 메서드
+    : 이미 같은 클래스 내부 이므로 메서드명만으로 사용이 가능하다.
+    : main 메서드 내부에서 다른 메서드를 호출할려면 해당 메서드는 static이여야한다.
+   >> 메서드명(인자값);
+
+  cf)static
+     static 필드 : 클래스의 모든 인스턴스에서 공유되는 데이터변수
+     선언 >> static 데이터타입 필드명;
+     호출 >> 클래스명.필드명
+
+     static 메서드 : 객체 생성없이 직접호출 가능하다.
+     선언 >> static 반환타입 메서드명() {}
+     호출 >> 클래스명.메서드명();
+
+     main메서드 내의 static 메서드 : main메서드 내부에서 다른 메서드를 호출할 때 사용한다.
+     선언 >> static 반환타입 메서드명(매개변수) {실행코드}
+     호출 >> 메서드명(인자값);
+
+
+	class Operator {
+	    //인스턴스 변수(필드)
+	    int a, b; 
+    
+	    //인스턴스 메서드
+	    //: 인스턴스 변수 a,b가 필요한 작업에 사용
+	    //: 매개변수를 사용하지 않을 수도 있음
+	    int add() {
+	        return a + b;
+	    }
+	    int subtract() {
+	        return a - b;
+	    }
+    
+	    //정적 메서드
+	    //: 인스턴스 변수와 관계없이 매개변수만으로 작업한다
+	    static int multiplay(int a, int b) {
+	        return a * b;
+	    }
+	    static int divide(int a, int b) {
+	        return b != 0 ? a / b : b; //나누기 0 처리
+	    }
+	}
+
+	public class Method04 {
+	    public static void main(String[] args) {
+	        System.out.println("===인스턴스 메서드===");
+	        Operator operator = new Operator();
+	        //인스턴스 필드(변수) 값 부여
+	        operator.a = 10;
+	        operator.b = 20;
+	        //인스턴스 메서드 호출
+	        System.out.println(operator.add());
+	        System.out.println(operator.subtract());
+
+	        System.out.println("===정적 메서드===");
+	        //정적(클래스, static)메서드 호출
+	        int result1 = Operator.multiplay(10, 20);
+	        int result2 = Operator.divide(20, 10);
+	        int result3 = Operator.divide(20, 0);
+	    }
+	}
+
+
+
+
+=== 용어 정리 ===
+클래스, 객체, 인스턴스
+- 필드(속성): 인스턴스 변수, 정적클래스 변수
+  cf) 메서드에는 지역변수가 있다
+- 메서드: 인스턴스 메서드, 정적클래스 메서드
+- 생성자
+
+
+== (메서드) 오버로딩 ===
+: overloading, 중복 정의
+: 한 클래스 내에서 같은 이름의 '메서드'를 여러개 정의하는 것
+
+1.오버로딩의 성립 조건
+ - 메서드 이름이 동일해야한다
+ - 단, 매개변수의 개수 또는 타입이 달라야한다
+ - 반환타입은 오버로딩 성립에 영향이 없다.
+
+2.오버로딩의 장점
+ - 사용자가 메서드의 매개변수 순서를 외우지 않아도 사용가능하다.
+ - 작업의 본질이 동일한 메서드를 하나의 이름으로 그룹화 가능하다.
+   ( 코드의 재사용성 및 가독성이 향상된다. )
+ - 컴파일 시 타입 체크가 강화된다.
+   ( 올바른 매개 변수를 가진 메서드를 자동 선택된다. )
+
+3.오버로딩의 단점
+ - 중복적으로 의미없이 생성하는 경우, 실질적으로 필요한 구현 메서드를 찾기 어렵다
+   ( 복잡성 증가 )
+
+	class Calc {
+	    int a, b, c, d;
+	    double x, y;
+
+	    int add(int a, int b) {
+	        return a + b;
+	    }
+
+	   //변수 차이 여부와 반환타입의 차이 여부는 오버로딩과 관련없다.
+	   //반드시 매개변수의 개수 또는 타입이 달라야한다.
+	   //long add(int c, int d){
+	   //return c + d;
+	   //}
+
+	    //매개변수의 데이터타입 차이
+	    double add(double x, double y) {
+	        return x + y;
+	    }
+	    double add(int x, double y) {
+	        return x + y;
+	    }
+	    double add(double x, int y) {
+	        return x + y;
+	    }
+
+	    //매개변수의 개수 차이
+	    int add(int a, int b, int c) {
+	        return a + b + c;
+	    }
+
+
+
+
+
+
+
+
+

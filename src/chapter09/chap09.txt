@@ -1,0 +1,547 @@
+
+=== 자바 예외 처리 ===
+1.예외(Exception)란 프로그램 실행 중에 발행할 수 있는 예기치 못한 문제나 조건을 말한다
+  예외 처리 기법이란 예외가 발생할 경우 프로그램이 중단되지 않고 대응하여 정상적인 흐름을 유지하는 방법을 말한다.
+
+
+2.자바 예외 클래스 구조
+ Throwable: 모든 예외와 오류의 최상위 클래스
+ - 모든 예외 클래스는 해당 클래스를 상속받는다
+ - 예외와 관련된 메시지, 처리 방법에 대한 예시 정보를 포함한다.
+
+ 1) Exception 클래스(예외)
+   : 프로그램이 처리할 수 있는 예외들을 정의한다
+   - 예외 처리를 통해 개발자가 처리할 수 있는 문제들을 정의한다.
+   1-1) Checked Exception
+     : 컴파일 시점에 체크되는 예외
+     - 개발자가 직접 반드시 처리
+     - 컴파일러는 해당 예외가 처리되어있지 않을 경우 오류를 발생시킨다
+   1-2) Runtime(Unchecked) Exception
+     : 런타임 시점에 발생되는 예외
+     - 개발자의 실수로 발생하는 예외
+     - 컴파일러가 강제하지 않는다(체크하지 않음)
+     cf) 컴파일 시점과 런타임 시점
+       - 컴파일 시점 : 소스 코드를 기ㅖ어로 번역하는 단계, 실행되지 않고 코드를 분석하고 변환하는 과정에만 국한된다
+                          자바에서는 .java 파일이 컴파일되어 .class파일(바이트코드)로 생성된다.
+       - 런타임 시점 : 컴파일된 프로그램이 실행되는 단계, 프로그램이 실제로 메모리에 로드되고 CPU에서 실행된다.
+                          컴파일 시점에서 잡히지 않은 놀리적 오류나 런타임 예외 발생 가능성이 존재한다
+
+ 2) Error(오류)
+   : 프로그램 외부에서 발생하는 시스템 수준의 문제이다.
+   - 개발자가 직접 처리할 수 없다
+   - 메모리 부족, 네트워크 연결 등
+
+
+
+3.자바 예외 처리 방법
+ : try-catch 블록, throw 키워드, throws 키워드, 사용자 정의 예외
+
+ 1)try-catch 블록
+   - catch 블록 : 특정 예외타입이 발생했을 때 실행될 코드를 정의한다.
+     	다중 catch 블록으로 여러개를 예외처리할 수 있다.
+     	catch 블록은 동시다발적으로 처리되지 않고 하나만 처리된다.
+   - finally 블록 : 예외 발생 상관없이 실행되는 코드 블럭.
+     	생략할 수 있다.
+   >>
+     try {
+         예외가 발생할 수 있는 코드
+     } catch (ExceptionType1 e) {
+         예외 발생 시 실행할 코드
+     } catch (ExceptionType2 e) {
+         예외 발생 시 실행할 코드
+     } finally {
+         예외 발생 상관없이 실행되는 코드 블럭
+     }
+
+ cf) e.getMessage() : 오류 메세지 출력
+
+ 2) throw 키워드
+   : 프로그램 실행 중에 특정 조건에서 예외를 직접 발생시킬 때 사용한다.
+   - 주로 조건문과 함께 사용한다
+   - 인자로 전달되는 문자열 예외 메시지는 getMessage() 메서드를 통해 출력 가능하다.
+      >>
+      throw new ExceptionType("에외 메시지");
+
+
+
+	class CustomExeption extends Throwable {
+	}
+
+	public class A_Exception01 {
+	    public static void main(String[] args) {
+	        //try-catch 블럭
+
+	        //char c1 = 'abc'; - 컴파일 예외, 실행 전에 발생하는 오류
+	        String s1 = "string";
+
+	        //System.out.println(c1);
+	        System.out.println(s1);
+
+	        //int division = 10 / 0; // 런타임 예외, 실행 후에 발생하는 오류
+	        //System.out.println(division); //Exception in thread "main" java.lang.ArithmeticException
+
+	        try {
+	            //에외가 발생하는 코드
+	            int division = 10 / 0; //정수는 0으로 나눌 수 없다
+	        } catch (Exception e) {
+	            //try블록 내에서 방생하는 에외를 소괄호() 내에서 매개변수로 전달받아 중괄호 {} 실행문에서 처리한다.
+	            System.out.println(e.getMessage());
+	            System.out.println("0으로 나눌 수 없습니다");
+	        }
+
+	        try{
+	            System.out.println("예외 처리됐으면 출력 안됨");
+
+	            int division = 10 / 0; //ArithmeticException 발생
+
+	            int[] numbers = new int[5];
+	            numbers[10] = 50; //ArrayIndexOutOfBoundsException 발생
+
+	            String text = null;
+	            System.out.println(text.length()); //NullPointerException 발생
+
+	            //에러에 대한 예외 하나에만 전달된다.
+	        } catch (ArithmeticException e) {
+	            System.out.println("수학적 공식의 에러 발생 " + e.getMessage());
+	        } catch (ArrayIndexOutOfBoundsException e) {
+	            System.out.println("배열 인덱스 초과 오류 발생 " + e.getMessage());
+	        } catch (NullPointerException e) {
+	            System.out.println("null 계산할 경우 오류 발생 " + e.getMessage());
+	        } catch (Exception e) {
+	            System.out.println("초과 오류 발생 " + e.getMessage());
+	        } finally {
+	            System.out.println("finally 블록 실행");
+	        }
+
+	        //throw 키워드
+	        int age = -10;
+
+	        try{
+	            if(age<0){
+	                throw new Exception("나이는 음수가 될 수 없습니다");
+	            }
+	        } catch (Exception e) {
+	            System.out.println(e.getMessage());
+	        }
+	    }
+	}
+
+
+
+
+
+
+Throwable : 예외(Exception) + 오류(Error)
+
+=== 사용자 정의 예외 클래스  ====
+: 자바의 Exception 클래스를 상속받는 자식 클래스
+  호출부 >> throw new 사용자정의예외생성자명("예외 처리 문구");
+  사용자 정의 예외를 발생시키는 throw 키워드의 경우 예외 처리 구문 내에 사용되지 않으면 (컴파일)예외가 발생한다
+
+  cf) catch 블럭의 예외객체 'e'
+     : 주로 객체변수는 Exception의 철자를 사용하여 'e'로 명시한다
+
+
+=== throws 키워드 ===
+- 메서드 선언부에 위치해있다
+- 호출자에게 예외 처리를 위임한다.
+- 해당 메서드에서 발생할 수 있는 예외 가능성을 처리하는 키워드이다.
+- 체크(컴파일) 예외 : 필수 / 언체크(런타임) 예외 : 선택
+- (접근제어자) 반환타입 메서드명() throws Exception Type {}
+
+ cf) throw 키워드
+   - 메서드 내부에 위치해있다
+   - 예외를 발생시킨다
+   - throw new ExceptionType("에러메세지");
+
+
+	import java.util.InputMismatchException;
+	import java.util.Scanner;
+
+	//사용자 정의 예외 클래스
+	class CustomException2 extends Exception {
+	    CustomException2(String message){ //생성자
+	        super(message); //부모클래스의 생성자 호출
+	    }
+	}
+
+	//throws
+	class InvalidUserException extends Exception {
+	    InvalidUserException(String message) {
+	        super(message);
+	    }
+	}
+
+	public class A_Exception02 {
+	    //throws
+	    //1) 단일예외 던지기
+	    static void login(String username, String password) throws InvalidUserException {
+	        if(!"admin".equals(username)){
+	            throw new InvalidUserException("사용자 이름이 잘못되었습니다");
+	        }
+	    }
+	    //2) 여러예외 던지기
+	    static void exceptions(int num) throws ArithmeticException, ArrayIndexOutOfBoundsException{
+	        if(num == 0) {
+	            throw new ArithmeticException("0으로 나눌 수 없습니다");
+	        } else if (num == 2) {
+	            throw new ArrayIndexOutOfBoundsException("배열 인덱스를 초과하였습니다");
+	        }
+	    }
+
+	    public static void main(String[] args) {
+	        //=== 사용자 정의 예외 클래스 사용===
+	        //throw new CustomException2("예외 처리되지 않는 예외");
+	        //: 사용자 정의 예외를 발생시키는 throw 키워드의 경우 예외 처리 구문 내에 사용되지 않으면 (컴파일)예외가 발생한다
+	        try {
+	            throw new CustomException2("사용자 정의 예외가 발생"); //사용자 정의 예외가 발생 - 런타임 예외
+	        } catch (CustomException2 e) {
+	            System.out.println(e.getMessage()); //발생된 예외를 catch블록에서 처리
+	        }
+	        System.out.println("========");
+
+	        Scanner scanner = new Scanner(System.in);
+	        try{
+	            System.out.println("정수를 입력하세요");
+	            int number = scanner.nextInt();
+	            System.out.println("입력하신 숫자는 " + number + "입니다");
+	        } catch (InputMismatchException e){ //예외객체 'e' : Exception의 철자를 사용하여 'e'로 명시한다
+	            System.out.println("정수가 아닌 다른 타입의 입력이 작성됨.");
+	        } finally {
+	            scanner.close();
+	        }
+
+
+	        //throws
+	        try{
+	            login("abcde", "password");
+	        } catch(InvalidUserException e){
+	            System.out.println("단일 던지기 테스트");
+	            System.out.println(e.getMessage());
+	        }
+	        System.out.println("======");
+
+	        try{
+	            System.out.println("여러예외 던지기 테스트");
+	            exceptions(1);
+	        } catch (ArithmeticException e){
+	            System.out.println("예외처리1 : " + e.getMessage());
+	        } catch (ArrayIndexOutOfBoundsException e) {
+	            System.out.println("예외처리2 : " + e.getMessage());
+	        }
+	        System.out.println("정상적인 코드");
+	    }
+	}
+
+
+
+
+
+
+
+
+
+
+=== API (Application Programming Interface) ===
+: 소프트웨어 또는 시스템 간 상호작용을 가능하게하는 정의된 메서드의 집합을 말한다.
+: 소프트웨어나 하드웨어와 상호작용할 수 있는 인터페이스를 제공한다.
+
+자바의 API 클래스
+: 자바 프로그래밍 내에서 미리 정의된 클래스와 메서드의 집합
+- 자바 API는 표준 자바 라이브러리로 제공한다
+- 다양한 패키즈로 나뉘며, 가가 패키지는 특정 기능을 담당한다
+
+1. java.lang 패키지
+ : 기본 클래스(String, Math,System 등)를 포함
+ - 자동으로 포함하여 import 없이 사용 가능하다
+
+2. java.io 패키지
+ : 입출력과 관련되 클래스
+ - File, InputStream 등과 같이 외부의 입출력과 관련되어있다.
+
+3. java.util
+ : 유틸리티 클래스( List, Map, Date 등)를 포함한다
+
+ cf)자바 API 공식 문서 : 자바API 오라클
+   https://docs.oracle.com/en/java/javase/17/docs/api/index.html
+
+
+
+	public class B_JavaApi {
+	    public static void main(String[] args) {
+
+	        //System 클래스의 API를 호출하여 콘솔에 메시지를 출력
+	        System.out.println();
+
+	        //java.lang
+	        String message = "Hello, Hava";
+	        System.out.println(message.length()); //ctrl + 좌클릭으로 기본 클래스를 볼 수 있다
+
+	        double result = Math.sqrt(25); //square root 제곱근
+	        System.out.println(result);
+	    }
+	}
+
+
+
+
+
+
+=== java.lang 패키지 ===
+: 자바 프로그램의 가장 기본적인 클래스들을 포함
+- 별도의 import문 없이 사용이 가능하다
+
+1.Object 클래스
+ : 자바에서 모든 클래스의 최상위 클래스
+ - 모든 클래스는 Object 클래스를 상속받는다
+
+ 1) toString() 메서드
+   : 객체의 문자열 표현을 반환한다
+   - 기본 구현 : '객체의 클래스 이름 + @ + 메모리 주소' 반환
+   - 오버라이딩(재정의)하여 원하는 정보를 반환하도록 바꿀 수 있다
+
+ 2) A equals(B) 메서드
+   : 두 객체가 동등한지 비교한다.
+   - 두 객체의 참조를 비교한다. (동일한 주소값을 가지는지 비교한다)
+   - 오버라이딩(재정의)라여 객체 내용 기반의 비교를 구현할 수 있다.
+
+2.Math 클래스
+ : 수학 연산 및 함수를 제공하는 클래스
+ - 모든 필드와 메서드는 static이다. Object클래스와 달리 인스턴스화 불필요하다
+     >> Math.메서드
+ - 절대값 반환 .abs(데이터)
+   최댓값 반환 .max(데이터1,데이터2)
+   최솟값 반환 .min(데이터1,데이터2)
+   제곱근 반환 .sqrt(데이터)
+   제곱값 반환 .pow(데이터,차수)
+    0이상 1미만의 무작위 난수 생성 .random()
+
+3.String 클래스
+ : 문자열 조작을 위한 다양한 메서드를 제공
+     >> 객체명.메서드
+ - 문자열길이 반환 .length()
+   문자열 비교  A.equals(B)
+ - substring(start index, end index)
+   : 시작 인덱스 이상 끝 인덱스 미만까지의 부분 문자열을 반환다
+     인덱스 번호는 0부터 시작한다. 공백과 기호까지 인덱스 번호에 포함된다.
+ - indexOf(String);
+   : 문자열에서 특정 문자열의 첫 번째 위치를 반환한다.
+ - charAt(index);
+   : 특정 위치의 문자를 반환한다
+
+
+	class MyClass { //extends Object 생략
+	    private int id;
+	    private String name;
+
+	    MyClass(int id, String name) {
+	        this.id = id;
+	        this.name = name;
+	    }
+
+	    //Object 클래스 - toString() 메서드
+	    //오버라이딩 안 하면 클래스이름+주소값이 반환된다. chapter09.MyClass@3ac3fd8b
+	    @Override
+	    public String toString() {
+	        return "MyClass(ID : " + id + " / NAME : " + name + ")";
+	    }
+	}
+
+	public class C_JavaLang {
+	    public static void main(String[] args) {
+
+	        //Object 클래스 - toString() 메서드
+	        MyClass myClass1 = new MyClass(1, "이승아");
+	        System.out.println(myClass1.toString());
+
+	        //Object 클래스 - equals 메서드
+	        MyClass myClass2 = new MyClass(2, "백진우");
+	        System.out.println(myClass1.equals(myClass2));
+
+	        System.out.println("=========");
+
+	        //Math 클래스
+	        System.out.println(Math.abs(-10));  //절대값 반환 .abs(데이터)
+	        System.out.println(Math.max(100,200));  //최댓값 반환 .max(데이터1,데이터2)
+	        System.out.println(Math.min(100,200));  //최솟값 반환 .min(데이터1,데이터2)
+	        System.out.println(Math.sqrt(16));  //제곱근 반환 .sqrt(데이터)
+	        System.out.println(Math.pow(2,3));  //제곱값 반환 .pow(데이터,차수)
+	        System.out.println(Math.random());  //0이상 1미만의 무작위 난수 생성 .random()
+
+	        System.out.println("==========");
+
+	        //String 클래스
+	        String message = "Merry Christmas!";
+	        System.out.println(message.length());  //길이는 문자 및 공백과 기호까지 포함한다
+	        boolean isEqual = message.equals("Merry Xmas");
+	        System.out.println(isEqual);
+
+	        //substring(int start, int end)
+	        System.out.println(message.substring(6,15));
+	        System.out.println(message);  //문자열은 불변(immutable) 데이터이다
+
+	        //indexOf(String str);
+	        int index = message.indexOf("Chris");
+	        System.out.println(index);
+
+	        //charAt(int index);
+	        char c = message.charAt(6);
+	        System.out.println(c);
+	    }
+	}
+
+
+
+
+
+
+=== java.util 패키지 ===
+: 자바 표준 라이브러리 중 하나
+- 데이터의 구조, 시간과 날짜 처리, 무작위 숫자 생성 등의 기능을 포함한다
+- 외부에 있는 클래스를 import하여 사용한다.
+
+시간과 날짜 처리 클래스
+1. Date 클래스
+ : 날짜와 시간을 표현
+ : 현재의 밀리초 단위까지 반환한다.
+   >> Date 객체를 생성하여 인스턴스 필드와 메서드를 활용한다.
+ 1) toString(): 날짜와 시간을 문자열로 반환한다
+ 2) getTime(): 1970년 1월 1일 00:00:00 (UTC)부터 현재시간까지의 밀리초(ms)를 반환한다. 날짜 계산에 사용한다
+   (UTC : 시간대의 기준점, 한국은 UTC + 8:30, 근데 일본이 9:00라서 9사용)
+   ex) 어제날짜 - 오늘날짜 = 하루
+
+2. Calendar 클래스
+ : 날짜와 시간을 조작하거나 필드를 개별적으로 제어할 수 있는 도구
+ - 추상 클래스이며 getInstance() 메서드를 통해 구현 객체를 반환받아 사용한다.
+ 1) .getInstance() : 현재 날짜와 시간으로 초기화된 Calendar 객체를 반환한다.
+ 2) .get(int field) : 지정된 필드 값을 반환한다.
+    Calendar.YEAR
+    Calendar.MONTH (MONTH는 0~11을 반환하기에 +1 해줘야 한다)
+    Calendar.DAY_OF_MONTH 
+ 3) .set(int year, int month, int day) : 날짜 설정
+
+
+	import java.util.Calendar;
+	import java.util.Date;
+
+	public class D_JavaUtil {
+	    public static void main(String[] args) {
+	        //Date 클래스
+	        Date date = new Date();
+	        System.out.println("현재 날짜와 시간 : " + date.toString());  //Thu Dec 05 14:12:44 KST 2024
+	        System.out.println("현재까지의 밀리초 : " + date.getTime());  //1733375564329
+	        System.out.println("=========");
+
+	        //Calendar 클래스
+	        Calendar calendar = Calendar.getInstance(); //선언한 기점으로 시간 초기화
+	        System.out.println(calendar.get(Calendar.YEAR));  //2024
+	        System.out.println(calendar.get(Calendar.MONTH) + 1);  //12
+	        System.out.println(calendar.get(Calendar.DAY_OF_MONTH));  //5
+	        calendar.set(2025,3,14);
+	        System.out.println(calendar.get(Calendar.YEAR));  //2025
+	        System.out.println(calendar.get(Calendar.MONTH));  //3
+	        System.out.println(calendar.get(Calendar.DAY_OF_MONTH));  //14
+
+
+
+
+
+
+
+=== java.time 패키지 ===
+: 날짜와 시간을 다루는 도구 (명확성과 유연성을 제공한다)
+- java.util의 Date와 Calendar의 문제점을 보완하엿다.
+: ISO-8601 표준을 기반으로 설계됐다
+: YYYY-MM-DDThh:mm:ss.sssZ
+    
+1.LocalDate - 날짜
+: 날짜(연도, 월, 일)
+  .now() - 현재 날짜 반환
+  .of(연도, 월, 일) - 특정 날짜 반환
+  .plusDays(일), .plusMonths(월), .plusYears(년) - 입력값만큼 해당 값 증가
+  .minusDays(일), .minusMonths(월), .minusYears(년) - 입력값만큼 해당 값 감소
+       
+2.LocalTime - 시간
+: 시간(시, 분, 초, 나노초)를 다룬다
+- 날짜와 시간대 정보는 포함하지 않는다
+  .now() = 현재 시간 반환
+  .of(시, 분, 초) = 특정시간 반환
+  .plusSeconds(초), .plusMinutes(분), .plusHours(시간) - 입력값만큼 해당 값 증가
+  .minusSeconds(초), .minusMinutes(분), .minusHours(시간) - 입력값만큼 해당 값 감소
+       
+3.LocalDateTime 클래스
+: 날짜와 시간을 함께 다루는 클래스
+: .now(), .of(), .plus~(), .minus~() 사용가능
+       
+  cf) get 메서드
+      : getYear(), getMonth(), getDayOfMonth() : 날짜 정보 반환
+        getHour(), getMinute(), getSecond() : 시간 정보 반환
+               
+  cf) 날짜와 시간 포맷팅(formatting)
+     >> .ofPattern("yyyy-MM-dd HH:mm:ss");
+      - M은 달, m은 분
+      - 원하는 시간단위만 선택가능하다
+    
+
+	import java.time.LocalDate;
+	import java.time.LocalDateTime;
+	import java.time.LocalTime;
+	import java.time.format.DateTimeFormatter;
+
+	public class E_JavaTime {
+	    public static void main(String[] args) {
+	        //LocalDate - 날짜
+	        //: 날짜(연도, 월, 일)
+	        LocalDate today = LocalDate.now();
+	        System.out.println(today);  //2024-12-05
+
+	        LocalDate specificDate = LocalDate.of(2025,3,14);
+	        System.out.println(specificDate);  //2025-03-14
+	        LocalDate tomorrow = today.plusDays(1);
+	        System.out.println(tomorrow);  //2024-12-06
+	        LocalDate oneMonthAgo = today.minusMonths(1);
+	        System.out.println(oneMonthAgo);  //2024-11-05
+	        System.out.println("=====");
+
+	        //LocalTime - 시간
+	        //: 시간(시, 분, 초, 나노초)를 다룬다
+	        LocalTime now = LocalTime.now();
+ 	        System.out.println(now);  //14:14:19.021782
+	        LocalTime specificTime = LocalTime.of(14,30);
+	        System.out.println(specificTime);  //14:30
+	        LocalTime Later = now.plusMinutes(33);
+	        System.out.println(Later);  //14:47:19.021782
+	        LocalTime Ago = now.minusHours(1);
+	        System.out.println(Ago);  //13:14:19.021782
+	        System.out.println("=====");
+        
+	         //get 메서드
+	        System.out.println(today.getMonth());  //DECEMBER
+	        System.out.println(now.getHour());  //14
+
+	        //LocalDateTime 클래스
+	        // : 날짜와 시간을 함께 다루는 클래스
+	        LocalDateTime nowDateTime = LocalDateTime.now();
+	        System.out.println(nowDateTime);  //2024-12-05T14:14:19.021782
+	        System.out.println(nowDateTime.toLocalDate());  //2024-12-05
+	        System.out.println(nowDateTime.toLocalTime());  //14:14:19.021782
+
+	        //cf) 날짜와 시간 포맷팅(formatting)
+	        //    .ofPattern("yyyy-MM-dd HH:mm:ss");
+	        //    원하는 시간단위만 선택가능
+	        LocalDateTime example = LocalDateTime.now();
+	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");  //M은 달, m은 분
+	        System.out.println(example.format(formatter));  //2024-12-05 14:14:19
+	    }
+	}
+
+
+
+
+
+
+
+
+
+
+

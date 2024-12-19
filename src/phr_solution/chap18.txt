@@ -1,0 +1,17 @@
+사용된 API나 메서드나 로직 적기
+
+
+
+
+
+
+
+
+
+    //ID 생성 로직
+    //synchronized : 동기화를 위해 사용된다
+    //여러 스레드가 동시에 generateId() 메서드를 호출하는 것을 방지한다
+    //한 스레드가 메서드를 실행하는 동안 단른 스레드는 대기 상태에 놓인다.
+    private synchronized Long generateId() {
+        return currentId++;
+    }

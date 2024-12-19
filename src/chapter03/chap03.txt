@@ -1,0 +1,300 @@
+d2coding 글꼴 다운하기
+D2CodingAll 파일 -> 우클릭 -> 모든 사용자용 설치
+인텔리제이에서는 jetbrains mono가 좋음
+
+
+/// 배열(Array) ///
+: 같은 타입의 여러 변수를 하나의 집합으로 묶어서 처리하는 자료 구조이다.
+- 데이터를 연속적으로 저장된다.
+- 순서가 있다 (index 인덱스 번호 0부터 n-1까지)
+- 중복이 된다 (동일한 값을 여러 요소에 저장할 수 있다)
+   cf) 요소란 배열에서 각각의 데이터를 말한다.
+ >> 데이터타입[] 배열명;
+      데이터타입 배열명[];
+	int[] array;
+
+
+1.배열의 생성
+ : 실제 데이터가 저장되는게 아니다. 데이터 배열이 저장된 첫 번쨰 메모리 주소가 저장된다.
+  cf) 참조 자료형 - 주소값이 저장
+ >> new 데이터타입[배열의 길이]
+     데이터 타입[] 배열명 = new 데이터타입[배열의 길이]
+	array = new int[3];
+	System.out.println(array); // 주소 [I@43a25848
+
+
+2.배열의 요소에 접근
+- 배열 생성 시 모든 요소는 해당 데이터 타입의 기본값으로 초기화된다.
+  숫자(0), 문자열(''), 논리형(false), String(null)
+ 배열의 요소에 접근
+ >> 배열명[인덱스 번호]
+ 데이터 변경 및 삽입
+ >> 배열명[인덱스 번호] = 데이터값;
+	array[1] = 456;
+	System.out.println(array[1]); //456
+
+
+3.배열의 선언과 동시에 초기화
+ : new 연산자를 사용한 직접적인 배열 생성 시 길이 지정을 하지 않는다
+  요소의 개수를 파악하여 배열의 길이를 자동 지정된다.
+ >> 데이터 타입[] 배열명 = new 데이터타입[] {요소1, 요소2, ....}
+     데이터 타입[] 배열명 = {요소1, 요소2, ...}
+	int[] scoreList = new int[] {90, 85, 100};
+        	System.out.println(scoreList[0]); // 90
+        	char[] greet = {'h','e','l','l','o'};
+        	System.out.println(greet[4]); // o
+
+
+4.배열의 길이(크기)
+ : .length 속성으로 확인한다.
+ >> 배열명.length;
+	System.out.println(greet.length); // 5
+
+
+5.배열의 특징
+ : 한번 생성되면 크기 변경이 불가하다
+   참조 타입이다, 주소값이 저장된다
+   모든 요소는 같은 자료형이여야 한다.
+
+
+6.문자열 배열의 생성
+ : String 타입 배열의 초기값은 null이다.
+	String[] fruits = new String[3];
+        	System.out.println(fruits[0]);  // null
+        	fruits[0] = "사과";
+        	System.out.println(fruits[0]);  // 사과
+
+
+7.배열 요소의 삭제
+ : 삭제 기능을 담당하는 문법이 없다.
+   삭제할 요소를 제외한 나머지 요소로 새로운 배열을 복사해야한다.
+	int[] original = {1, 2, 3, 4};
+        	int removeIndex = 2; //삭제할 요소 위치
+        	int[] newArray = new int[original.length - 1];
+        	int k = 0; //새 배열의 요소 위치
+        	for(int index = 0; index  < original.length; index ++){
+         		if(index  == removeIndex){
+                		continue; //해당 인덱스 건너뛰기
+            	}
+            	newArray[k++] = original[index]; //해당 인덱스 대입
+            	// 사용될 인덱스 0, 0 / 1, 1 / 2, 3
+        	}
+            
+
+8.배열을 순회하는 향상된 for문 (for each문)
+ : 배열의 요소가 변수에 순차적으로 대입된다.
+   cf) 배열의 인덱스 번호를 사용할 때는 일반 for문을 사용한다.
+ >> for (데이터타입 변수명: 해당 데이터타입의 배열) { 
+	배열의 모든 요소에 순차적으로 접근하는 코드
+      }
+	int[] arrayNumber = {1, 3, 5, 7, 9};
+	for (int number: arrayNumber) {
+	System.out.println(number);
+	}
+
+
+9.배열과 변수의 비교
+   배열 - 생성한다 (new 연산자)
+	데이터타입[] 배열명; or 데이터타입 배열명[];
+	같은 타입의 데이터를 여러개 저장 가능하다
+   변수 - 선언한다 (데이터 타입)
+	데이터타입 변수명;
+	하나의 데이터만 저장 가능하다
+
+
+
+
+
+
+/// 다차원 배열 ///
+: 배열의 배열 (2, 3, 4, ... 차원)
+  데이터를 테이블 형태로 구성할 때 유용하다
+  게임 보드, 데이터 분석, 그래픽 등에 사용한다.
+
+1.다차원 배열의 선언과 초기화
+  1)2차원 배열 선언
+   >> 데이터타입[][] 배열명;
+	int[][] matrix = new int[3][3];
+  2)배열 선언 후 값 할당
+   >> 배열명[행][열] = 값;
+	matrix[0][0] = 1; //1행 1열에 1대입
+        	matrix[0][1] = 1; //1행 2열에 1대입
+  3)선언과 동시에 초기화
+    >> 데이터타입[][] 배열명 = {{값,값}. {값,값}};
+	int[][] matrix2 = {{1,2,3}, {4,5,6}, {7,8,9}, {10,11,12}}; //4행 3열
+  4)배열의 출력
+    >> for(데이터타입[] 배열명2: 배열명) {
+              for(데이터타입 변수명: 배열명2) {
+            	System.out.println(변수명);
+              }
+         }
+
+	for(int[] row: matrix2){ //row에 행배열 대입
+		for(int value: row){ //value에 행으로 나눠진 row의 각요소 대입
+            		System.out.print(value + " ");
+            	}
+            	System.out.println();
+	}
+
+
+
+
+
+
+
+/// Arrays 클래스 ///
+: 배열을 조작하는데 유용한 기능들을 제공해주는 자바 내부 클래스
+- 정렬, 검색, 변환 등
+
+Arrays 클래스 사용법
+1.배열 생성 방법
+ >> 데이터타입[] 배열명 = {요소};
+	int[] numbers = {3, 2, 5, 4, 1};
+
+2.배열 정렬 (오름차순)
+ >> Arrays.sort(배열명);
+ cf) .(마침표) :: 해당 클래스의 내부 기능 사용
+	Arrays.sort(numbers);
+	System.out.println(numbers[0]); // 1
+
+3.배열 변환
+ >> Arrays.toString();
+ 배열은 참조 자료이기때문에 배열 접근 시 주소가 나온다.
+ 배열의 전체 구조를 파악할 수 있는 기능
+ 각 요소를 수회하며 문자열 [요소1,요소2,...]형태로 변환
+	System.out.println(numbers); //[I@3ac3fd8b
+	System.out.println(Arrays.toString(numbers)); //[1, 2, 3, 4, 5]
+
+4.배열 내 검색
+ >> Arrays.binarySearch(배열명, 검색내용);
+ 존재 시 해당 인덱스 번호 반환
+ 존재하지 않을 시 음수로 반환
+	System.out.println(Arrays.binarySearch(numbers, 1)); //0
+	System.out.println(Arrays.binarySearch(numbers, 6)); //-6
+
+5.배열의 비교
+ >> Arrays.equals(배열명1, 배열명2))
+ true, false 논리형태로 반환
+	int[] numbers2 = {1, 2, 3, 4, 5};
+	System.out.println(Arrays.equals(numbers, numbers2)); // numbers를 정령했으므로 true
+
+6.배열의 채움
+ >> Arrays.fill(배열, 삽입할 값);
+ 배열의 모든 요소를 특정 값으로 채운다
+	int[] example = new int[3];
+	System.out.println(Arrays.toString(example)); // [0,0,0]
+	Arrays.fill(example, 10);
+	System.out.println(Arrays.toString(example)); // [10,10,10]
+
+
+
+
+
+
+
+///  동적 배열 (ArrayList)의 개념 ///
+자바의 기본 배열 형태
+: 한 번 생성되면 크기 변경이 불가하다.
+  크기 변경 시 새로운 배열을 생성하여 원래 배열 요소를 복사해야한다.
+
+1.ArrayList란
+: java의 동적 배열 구현체이다.
+- 크기 제한 없이 동적으로 요소를 추가/삭제가 가능하다
+ >> Java Collection Framework의 일부인 'java.util.ArrayList'에서 제공한다
+
+2.ArrayList 장점
+- 동적 크기, 유연성, 다양한 메서드를 제공한다.
+
+3.ArrayList 주의사항
+- 일반 배열의 경우 int[] 배열명 = new int[크기];로 선언하지만 ArrayList는 아니다.
+- ArrayList의 경우 기본 데이터 타입(int, char 등) 사용이 불가하고,
+  참조형 데이터 타입만 가능하다.
+  String
+  int >> Integer
+  char >> Character
+  boolean >> Boolean
+- 참조형 데이터 타입의 기본 값은 모두 null이다.
+  cf) null : 아무런 객체도 참조하지 않음을 나타낸다.(기본 데이터 타입에서는 사용하지 않는다)
+
+
+
+
+///  동적 배열 (ArrayList)의 사용법  ///
+참조형 데이터의 기본값 null
+	Integer a = null;
+	int b = null; //참조형 데이터 타입이 아닌 기본 데이터 타입은 사용 불가
+
+
+1.ArrayList 생성
+ >> ArrayList<데이터 타입> 변수명 = new ArrayList<>(초기용량);
+ - 일반 배열과 달리 초기용량을 지정하지 않아도 되며, 크기 변경이 자유롭다.
+ - 초기 용량 미설정 시 기본값 10이지만, null일 때는 축약하여 크기가 없다.
+	int[] numbers = new int[];  //일반 배열은 크기를 지정하지 않으면 오류가 난다.
+	ArrayList<Integer> arrayList = new ArrayList<>(); //초기 용량 미설정 시 기본값 10
+	System.out.println(arrayList); //[ ]
+
+2.ArrayList 데이터 추가
+ : 배열의 마지막에 값을 추가한다.
+ >> 배열명.add(추가할 데이터)
+	arrayList.add(10);
+	arrayList.add(20);
+	arrayList.add(30);
+	System.out.println(arrayList); //[10, 20, 30]
+
+3.ArrayList 데이터 변경
+ >> 배열명.set(인덱스 번호, 변경할 데이터)
+	arrayList.set(1, 50);
+	System.out.println(arrayList); //[10, 50, 30]
+
+4.ArrayList 데이터 제거
+ >> 배열명.remove(인덱스 번호)
+	arrayList.remove(2);
+	System.out.println(arrayList); //[10, 50]
+ - 안정성을 위해, 반복문 사용 시 배열의 크기가 변경됨에 따라 증감연산자를 통해 반복문을 리셋해준다.
+	for(int i = 0; i < list.size(); i++){
+                    if(list.get(i) % 2 != 0){
+                        list.remove(i);
+                        i--;  //사이즈가 변경됨에 따라 인덱스 번호를 리셋하여 다시 반복한다.
+                             //연속된 제거요소에 관해 인덱스 조정이 없을 경우 제거되지 않고 건너뛰게 된다.
+                    }
+	}
+
+5.ArrayList 크기 확인
+ >> 배열명.size();
+	System.out.println(arrayList.size()); //2
+
+6.ArrayList 데이터 삽입
+ >> 배열명.add(인덱스 번호, 변경할 데이터)
+ - 해당 인덱스의 기존 데이터를 뒤로 밀어내고 삽입한만큼 용량이 커진다.
+	arrayList.add(1,123);
+	System.out.println(arrayList); //[10, 123, 50]
+
+7.ArrayList 요소 접근
+ >> 배열명.get(인덱스 번호)
+	System.out.println(arrayList.get(1)); //123
+
+
+
+cf) 난수 생성 기능
+ >> Random 랜덤명 = new Random();
+     랜덤명.nextInt(숫자값)
+ : 0이상 해당 숫자미만의 정수가 생성
+	Random random = new Random();  // 난수 선언
+	int index = random.nextInt(items.size()); // 난수 생성
+	String selectedItem = items.get(index); // 난수에 해당하는 배열 선택
+
+
+cf) 비교문 equals
+ : 두 문자열을 비교하여 boolean값으로 반환한다.
+ >> 문자열A.equals(문자열B)
+	//userGuess는 Scanner로 입력한 값이다.
+	//selectedItem은 난수로 선택된 배열의 요소이다.
+	if(userGuess.equals(selectedItem)){
+		System.out.println("정답입니다");
+		break;
+            } else if (userGuess.equals("종료")){
+		break;
+            } else {
+		System.out.println("틀렸습니다. 다시 시도해주세요");
+            }
+

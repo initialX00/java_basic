@@ -1,0 +1,77 @@
+Wrapper 자료형
+
+박싱
+Integer a = new Integer(10);
+Integer a = 10;
+언박싱
+int b = a;
+
+
+
+
+
+제네릭타입 <>
+일반자료형은 불가하다, 참조형자료로써 클래스타입으로 취급된다.
+T,R,C는 추상화된 제너릭타입을 말한다.
+
+
+	ForEachPrinter2<Integer> ifp = new ForEachPrinter2<>();  //객체의 자료형은 앞에서 유추가능하여 생략
+	new ForEachPrinter2<>();  //자료형이 유추가 불가능할 경우 Object로 취급된다.
+Object클래스도 제너릭타입처럼 데이터타입에 유연성을 가지지만 Object를 쓸경우 업캐스팅, 다운캐스팅이 필수다.
+
+
+static 메서드는 객체를 생성하지 않기에 제너릭타입을 리턴자료형(반환타입) 앞에 표기한다.
+	    public static <T> void print(T[] array) {
+	        for (T data : array) {
+	            System.out.print(data);
+	        }
+	    }
+
+
+List.of :: 추가,삭제,수정이 불가, 상수선언, 읽기전용
+	List<Integer> list = List.of(1,2,3,4,5);
+
+
+
+
+낮은 결합도, 높은 응집도가 목표.
+낮은 결합도 : 의존성 분립
+
+
+
+
+
+
+
+
+
+==============
+git
+ - 형상관리, 버전관리, 협업 툴
+ 작업물 백업 시 데이터저장에 관한 버전관리,
+ 협업 시 동기화 관리, 협업 시 충돌되는 코드를 관리한다.
+
+ 1.작업영역(워크스페이스,워크트리)
+  폴더의 단계와 작업물파일을 말한다.
+
+ 2.무대(스테이지)
+  작업영역에서 저장소로 이동하는 중간 저장공간.
+  저장소에 해당 파일에 대한 메세지를 남길 수 있다. git add
+  삭제는 저장소가 아니라 무대와 작업영역에서 실행한다. git reset
+  삭제했다는 정보를 저장소에 업로드한다.
+
+ 3.저장소(로그)
+  작업물과 함께 무대에서 받은 메세지를 저장한다.
+  git commit -m'___'
+  저장소에 업로드된 정보를 확인하는 코드 git status
+
+
+git hub
+ - git의 클라우드
+
+  git에서 hub로 push  (제일처음에는 -u origin main을 붙여준다)
+  hub에서 git으로 fetch
+
+  git remote add 주소
+  git remote remove 주소
+

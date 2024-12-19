@@ -1,0 +1,398 @@
+상수 : 변하지 않는 값
+
+
+=== 접근 제어자(제한자) ===
+: 클래스, 메서드, 변수의 접근 범위를 제어하여
+  외부로부터 데이터를 보호하고 객체 간의 의존성을 최소하하는 역할을 한다.
+- 캡슐화를 구현하여 코드의 보안성을 향상시킨다.
+
+1. 접근 제어자 종류
+ : private, default, protected, public
+ - 접근 제어자가 지정되지 않은경우 default(기본값)으로 지정된다.
+ - 클래스를 제어할 경우 클래스 자체에는 접근 제한자를 사용하지 않는다.
+ - 클래스를 제어할 경우의 경우 중첩 클래스의 경우에 사용한다
+    (클래스 내부에 클래스가 있는 경우 파일명 클래스에서 사용)
+
+2. 접근 제어자 범위
+ : public > protected > default > private
+ 1)private
+   : 같은 클래스 내에서만 접근이 가능하다
+   : private 성정 된 속성과 메서드는 해당 클래스 내부에서만 읽을 수 있다.
+ 2)default
+   : 같은 패키지 내라면 접근이 가능하다
+   : 패키지 외부에서는 접근이 불가능하다
+ 3)protected
+   : 동일한 패키지 내에서는 모든 클래스 내에서 접근 가능
+   : 다른 패키지에 있는 경우, 해당 클래스를 상속받은 하위 클래스에서만 접근이 가능하다.
+ 4)public
+   : 다른 패키지에서도 제한없이 접근가능
+
+
+=== 자바 패키지 또는 클래스 파일 간의 코드 연결 ===
+: import문을 사용
+ 1)같은 패키지 내 >> import 클래스파일명;
+ 2)다른 패키지 내 >> import 패키지명.클래스파일명;
+
+
+
+	import chapter07Other.OtherClass;
+	import chapter07Other.PublicClass;
+
+	//public class modifier {} //클래스를 제한할 경우 파일 클래스 내부가 아니여서 Error
+
+	class PrivateClass {
+	    private int myField;
+	    private void myMethod(){}
+	}
+	class DefaultClass {
+	    int myField;
+	    void myMethod(){}
+	}
+	class ProtectedClass extends OtherClass { //자식클래스, 임포트 필요
+	    //같은 패키지 내에서는 모든 클래스에서 접근 가능
+	    protected int myField;
+	    protected void myMethod(){}
+	    //다른 패키지의 경우 상속받은 하위 클래스에서만 접근 가능
+	    ProtectedClass(){
+	        System.out.println(super.otherField); //상속받은 부모클래스의 필드로 자식과 이름이 같으므로 super
+	        otherMethod(); //상속받은 부모클래스의 메서드
+	    }
+	}
+	class NotProtectedClass{
+	    NotProtectedClass(){
+	        //System.out.println(OtherClass.otherField);
+	        //otherField has protected access in chapter07Other.OtherClass
+	    }
+	}
+
+	public class A_Modifier {
+	    public class modifier {} //클래스를 제한할 경우 중접 클래스에서만 접근 제한자 사용 가능.
+	    public static void main(String[] args) {
+
+	        //private 같은 클래스 내에서만 접근가능
+	        PrivateClass privateClass = new PrivateClass();
+	        //privateClass.myField;
+	        //privateClass.myMethod();
+
+	        //default 같은 패키지 내에서만 접근가능
+	        DefaultClass defaultClass = new DefaultClass();
+	        defaultClass.myField = 10;
+	        defaultClass.myMethod();
+
+	        //protected 같은 패키지 자유, 다른 패키지는 상속필요.
+	        ProtectedClass protectedClass = new ProtectedClass(); //다른 패키지
+	        protectedClass.myField = 20; //같은 패키지
+	        protectedClass.myMethod(); //같은 패키지
+
+	        //public 다른 패키지여도 자유롭게 접근가능
+	        PublicClass publicClass = new PublicClass();
+	        System.out.println(publicClass.publicField);
+	        publicClass.publicMethod();
+	    }
+	}
+
+
+
+
+
+
+
+=== 캡슐화(Encapsulation) ===
+: 객체지향 프로그래밍에서 데이터와 해당 데이터를 처리하는 함수를 하나로 묶는다
+- 객체 내부의 구현을 숨기고, 외부에서는 제공된 메서드를 통해서만 접근할 수 있게 설정한다.
+- 데이터 보호, 유지보수성 향상, 사용자 편의성 증대
+- 데이터 보호와 유지보수성 향상을 목적으로 데이터 필드(속성)를 private으로 선언하고,
+  데이터에 접근하거나 수정할 때는 getter와 setter 메서드를 사용한다.
+
+=== getter와 setter 메서드 ===
+: 캡슐화된 데이터에 안정하게 접근하고 수정하는 기능
+: setter는 입력값의 유효성을 검사하여 데이터의 일관성을 유지할 수 있다.
+- getter : 객체의 특정 필드 값을 읽는 메서드
+          >>  get필드명();
+ - setter : 객체의 특정 필드 값을 설정하는 메서드
+          >> set필드명();
+ 
+
+	//학생정보 관리 클래스
+	class Student {
+
+	    //private로 보호
+	    private String name;
+	    private int age;
+	    private int score;
+
+	    //getter setter로 접근
+	    public String getName(){
+	        return name;
+	    }
+	    public void setName(String name){
+	        this.name = name;
+	    }
+
+	    public int getAge(){
+	        return age;
+	    }
+	    public void setAge(int age){ //setter의 유효성 검사
+	        if (age < 0 ){
+	            System.out.println("유효하지 않은 나이입니다");
+	        } else{
+	            this.age = age;
+	        }
+ 	   }
+
+	    public int getScore(){
+	        return score;
+	    }
+	    public void setScore(int score){ //setter로  유효성 검사
+	        if(score >= 0 && score <= 100){
+	            this.score = score;
+ 	       } else{
+	            System.out.println("유효하지 않은 점수입니다");
+	        }
+	    }
+	}
+
+	public class B_Encapsulation {
+	    public static void main(String[] args) {
+	        Student student = new Student();
+	        //student.name = "이승아"; - getter,setter로 접근하기
+	        student.setName("이승아");
+	        student.setAge(50);
+	        student.setScore(100);
+	        System.out.println(student.getName());  //이승아
+	        System.out.println(student.getAge());  //50
+	        System.out.println(student.getScore());  //100
+
+	        student.setAge(-10);  //유효하지 않은 나이입니다
+	        student.setScore(111);  //유효하지 않은 점수입니다
+	    }
+	}
+
+
+
+
+
+
+=== final 키워드 ===
+: 변수, 메서드, 클래스에서 사용 가능하다
+
+1.final의 장단점
+    1)장점 : 불변성으로 안정성을 보장한다
+    2)단점 : 유연성이 없이 그 자체로만 사용 가능하다.( 상속불가, 오버라이딩 불가 )
+
+2.final의 정의
+ 1)변수 : 값을 변경할 수 없는 상수를 선언한다.
+          : 상수를 지정하는 키워드, 한번만 초기화 가능하다, 재할당이 불가능하다.
+          : 변수명을 대문자로 작성하고, 단어 사이에는 언더스코어(_)를 사용한다.
+        >> final 데이터타입 변수명(대문자)
+ 2)메서드 : 자식클래스에서 재정의(오버라이드)할 수없는 메서드를 선언한다
+            :상속받은 final 메서드는 자식클래스에서 재정의 되지 않는다.
+             생략된 형태로만 사용이 가능하다. 호출해서만 사용가능하다.
+        >> (접근제어자) final 반환타입 메서드명() {}
+ 3)클래스 : 상속될 수 없는 클래스를 선언한다.
+            : 부모클래스로 사용할 수 없다.
+        >> final class 클래스명 {}
+
+
+	class MyFinalClass{
+	    //final 변수
+	    final int FINAL_VALIABLE = 30;
+	    //final 메서드
+	    public final void myMethod(){
+	        System.out.println("재정의 할 수 없는 메서드");
+	    }
+	}
+
+	class ChildClass extends MyFinalClass{
+	    //재정의 불가
+	    //public void myMethod(){
+	        //myMethod() in chapter07.ChildClass cannot override myMethod() in chapter07.MyFinalClass.
+	        //overridden method is final
+	    //}
+	    //부모클래스의 메서드 호출. 재정의하지 않고 사용한다.
+	    ChildClass(){
+	        super.myMethod();
+	    }
+	}
+
+	//final 클래스
+	final class Example1 {}
+	//class Example2 extends Example1 {} - 상속불가
+	//cannot inherit from final chapter07.Example1
+
+	public class C_Final {
+	    public static void main(String[] args) {
+	        ChildClass childClass = new ChildClass();
+	        childClass.myMethod();
+	    }
+	}
+ 
+
+   cf)주의사항
+	//에러 There is no parameterless constructor available in 'chapter07.Book'
+	//오류 자체는 기본 생성자 Book() {}를 생성하면 되지만 쓸데없는 로직이 추가된다.
+	//Book클래스에 빈생성자가 없으므로 매개변수를 전부 기입한 생성자를 만들때까지는 오류가 지속적으로 노출된다.
+	class EBook extends Book {
+	    private double fileSize;
+	    EBook(String title, String author, double fileSize) {
+	        super(title, author);
+	        this.fileSize = fileSize;
+	    }
+
+
+
+
+
+
+
+=== 자바에서의 타입 변환 ===
+1) 자료형 변환 : 변수 & 자료형에서의 자동 형 변환(묵시적), 강제 형 변환(명시적)
+2) 클래스 타입 변환
+ - 자동 타입 변환(Upcasting), 강제 타입 변환(Downcasting)
+ : 상속 관계에 있는 클래스 사이에서만 변환 가능하다. (자료형 변환보다 가능한 범위가 좁다)
+
+
+1.자동 타입 변환(Upcasting)
+ : 자식 객체를 부모 클래스 타입으로 변환한다
+  직접 명시 없이, 자동으로 타입 변환이 일어난다
+ - 해당 객체는 보존되면서 사용은 부모 객체처럼 사용된다.
+   두 클래스 간의 공통된 특성이 아닌 자식 클래스의 고유 메서드는 호출이 불가능하다
+ 1)자식 객체를 생성하면서 즉시 부모 타입으로 변환하여 저장하는 방법
+   >> 부모클래스명 객체변수명  = new 자식클래스명();
+ 2)이미 생성된 객체를 부모 타입으로 변환하는 방법
+   >> 부모클래스명 객체변수명 = 자식객체변수명;
+
+
+2.강제 타입 변환(Downcasting)
+ : 부모 클래스 타입으로 변환된 객체를 다시 자식 클래스 타입으로 변환하는 것
+   업캐스팅되지 않은 객체를 다운캐스팅할 수 없다.
+ - 자식 클래스에만 정의된 멤버에 접근 가능해진다.
+   >> 자식타입 객체변수명 = (자식타입) 부모객체변수명;
+
+     cf)클래스명 = 타입
+        클래스명은 데이터타입처럼 클래스타입으로서 사용할 수 있다.
+
+     cf)클래스 타입 변환 시 주의점
+        반드시 상속 관계와 객체의 실제 타입을 확인해야한다.
+        잘못된 캐스팅은 Exception 오류 발생.
+
+
+	class Parent {
+	    void displayInfo() {
+	        System.out.println("부모 클래스입니다");
+	    }
+	}
+	class Child extends Parent{
+	    @Override
+	    void displayInfo() {
+	        System.out.println("자식 클래스입니다");
+	    }
+	    void childMethod() {
+	        System.out.println("자식 클래스만 가진 메서드입니다");
+	    }
+	}
+
+	public class E_Class_Type {
+	    public static void main(String[] args) {
+	        //자동타입 변환 (Upcasting)
+	        //1. 자식 객체를 생성하면서 즉시 부모 타입으로 변환하여 저장하는 방법
+	        //>> 부모클래스 객체변수  = new 자식클래스();
+	        Parent childObject = new Child();
+	        childObject.displayInfo(); //자식클래스입니다
+	        //childObject.childMethod(); -Cannot resolve method 'childMethod' in 'Parent'
+
+	        //2. 이미 생성된 객체를 부모 타입으로 변환하는 방법
+	        //>> 부모클래스 객체변수 = 자식객체변수;
+	        Child childObject2 = new Child();
+	        childObject2.displayInfo();
+	        childObject2.childMethod();
+	        Parent parentObject = childObject2;
+	        parentObject.displayInfo();
+	        //parentObject.childMethod();
+
+
+	        //강제 타입 변환(Downcasting)
+	        //>> 자식클래스명 객체변수명 = (자식클래스명) 부모객체변수명;
+	        Child child = (Child) parentObject;
+	        child.childMethod();
+	        child.displayInfo();
+
+	    }
+	}
+
+
+
+
+
+
+
+=== 다형성 ===
+ : 많은 형태를 가질 수 있는 특성을 말한다.
+  부모클래스 타입의 참조 변수로 자식 클래스 객체를 참조한다
+ - 하나의 객체가 여러 타입의 인스턴스(객체)로 취급될 수 있는 특성을 가졌다.
+ - 상속 + 메서드 오버라이딩 + 클래스 타입 변환으로 구현한다.
+
+ cf) instanceof 연산자
+   >> 참조변수값 instanceof 클래스명
+   - 해당 객체가 특정 클래스의 인스턴스인지
+     또는 그 클래스를 상속받은 자식 클래스의 인스턴스인지 확인한다
+   - boolean 값으로 반환된다.
+   - true일 경우 상속관계이므로 해당 클래스 타입으로 형 변환이 가능하다.
+
+	class Vehicle {
+	    void display() {
+	        System.out.println("운송수단입니다");
+	    }
+	}
+	class Bus extends Vehicle {
+	    @Override
+	    void display() {
+	        System.out.println("버스를 타고 갑니다");
+	    }
+	}
+	class Subway extends Vehicle {
+	    @Override
+	    void display() {
+	        System.out.println("지하철을 타고 갑니다");
+	    }
+	}
+
+	public class F_Polymorphism {
+	    public static void main(String[] args) {
+	        //다형성 적용
+	        //부모클래스 타입의 참조 변수로 자식 클래스 객체를 참조한다
+	        Vehicle myVehicle = new Vehicle();
+	        Vehicle myBus = new Bus();
+	        Vehicle mySubway = new Subway();
+
+	        if (myBus instanceof Vehicle) {
+	            myBus.display();  //버스를 타고 갑니다
+	        }
+ 	       if (myVehicle instanceof Bus) {
+ 	           System.out.println("운송수단은 버스입니다");
+ 	       } else {
+	            System.out.println("운송수단은 버스가 아닙니다");  //운송수단은 버스가 아닙니다
+	        }
+	    }
+	}
+
+
+
+	        ArrayList<Animal> animals = new ArrayList<>();
+ 	       for (Animal animal : animals){  //클래스명은 데이터타입처럼 클래스타입으로서 사용할 수 있다
+	            service.handleAnimal(animal);
+	        }
+
+
+  cf) toString()
+    : '클래스명@해당객체의주소값'이 문자열로 출력된다
+    - 객체를 문자열로 표현할 때 사용
+    - 모든 클래스의 최상위 클래스인 Object 클래스에 정의된다
+      주문 정보를 반환하는 메서드
+
+	 //Object클래스에 있는것을 사용하므로 오버라이딩한다 
+	@Override
+	public String toString() {
+	   return "Order Detail [" + product.getName() + " + " + "Quantity: " + quantity +
+		" >> " + calculateTotalPrice() + " ]";
+	}

@@ -1,0 +1,493 @@
+
+
+=== 제네릭(Generic, 일반적인) ===
+: 데이터의 타입(type)을 일반화하는 것을 말한다
+: 클래스나 메서드의 데이터 타입을 미리 지정하지 않고,
+  구체적인 타입은 사용하는 시점에 지정할 수 있도록 설계된 기능을 말한다
+- 특정 타입에 의존하지 않고 다양한 타입을 지원하는 클래스 또는 메서드 설계가 가능하다.
+
+
+1. 제너릭 사용 목적
+ - 타입의 안정성을 높인다
+ - 코드의 재사용성을 높인다
+ - 가독성을 높인다
+
+
+2.제네릭 클래스
+ : 제네릭타입의 명시는 필수가 아니다 : 제네릭 타입의 구조에 값이 들어올 경우 해당 값으로 타입을 유추한다
+ : 제네릭 타입의 경우 클래스 형식의 참조 자료형을 사용해야한다
+   Wrapper 자료형 : int >> Integer / boolean >> Boolean / char >> Character
+ - 선언부
+   >> class 클래스명<제네릭타입> {
+        제너릭 타입을 사용하여 필드, 생성자, 메서드를 정의한다.
+       }
+ - 호출부
+   >> 클래스명 인스턴스명 = new 클래스명<>(인자값);
+   >> 클래스명<제네릭타입> 인스턴스명 = new 클래스명<>(인자값);
+
+
+3.제네릭 메서드
+ : 메서드 호출 시 전달된 타입에 따라 제네릭타입이 결정된다
+ : 타입 변수는 Type의 앞글자를 따서 <T>형식을 주로 사용한다
+ - 선언부
+    >> (*접근제한자 static*) <제네릭 타입> 반환타입 메서드명(매개변수) {실행코드;}
+ - 호출부
+    >> 제네릭클래스명.(*<데이터타입>*)메서드명(인자값);
+    >> 제네릭클래스의객체명.(*<데이터타입>*)메서드명(인자값);
+
+
+	//제네릭 클래스 선언
+	//키-값의 쌍을 저장
+	   >> class 클래스명<제네릭타입> {
+	        제너릭 타입을 사용하여 필드, 생성자, 메서드를 정의한다.
+	class Pair<K, V> {
+	    private K key;
+	    private V value;
+	
+	    public Pair(K key, V value){
+	        this.key = key;
+	        this.value = value;
+	    }
+	    public K getKey() {return key;}
+	    public V getValue() {return value;}
+	
+	    //제네릭 메서드
+		>> (*접근제한자 static*) <제네릭 타입> 반환타입 메서드명(매개변수) {실행코드;}
+	    static <T>void print(T value){
+	        System.out.println(value);
+	    }
+	}
+
+
+	public class A_Generic {
+	    public static void main(String[] args) {
+	        //제네릭 클래스 호출
+		   >> 클래스명 인스턴스명 = new 클래스명<>(인자값);
+		   >> 클래스명<제네릭타입> 인스턴스명 = new 클래스명<>(인자값);
+	        Pair<Integer, String> pair1 = new Pair<>(123, "안녕하세요");
+	        Pair<String, Integer> pair2 = new Pair<>("안녕하세요", 123); //코드의 재사용성을 높다
+	        System.out.println(pair1.getKey());
+	        System.out.println(pair2.getValue());
+	
+	        //제네릭 메서드 호출
+		    >> 제네릭클래스명.(*<데이터타입>*)메서드명(인자값);
+		    >> 제네릭클래스의객체명.(*<데이터타입>*)메서드명(인자값);
+	        pair1.<String>print("안녕");
+	        pair1.print(111);
+	        Pair.<Integer>print(222);
+	    }
+	}
+
+
+
+
+===제네릭 와일드 카드===
+: 제네릭 타입을 불특정하게 지정할 때 사용한다. 모든 타입을 의미한다.
+: 주로 '상속관계'에 있는 클래스 간의 유연한 타입 처리를 위해 사용된다
+>> ? 기호를 사용하여 표기한다
+    
+1. 일반 와일드 카드
+   <?> : 어떤 타입이든 허용 (= <? extends Object>)
+        List<?> list = new ArrayList<>();
+
+2. 상한 제한 와일드 카드
+   <? extends Type> : 특정 타입 또는 그 하위 타입만 허용한다.
+        List<? extends Number> list2 = new ArrayList<Integer>();
+
+3. 하한 제한 와일드 카드
+   <? super Type> : 특정 타입 또는 그 상위 타입만 허용한다.
+        List<? super Integer> list3 = new ArrayList<Object>();
+      cf) Number(정수 + 실수), Integer(정수)
+      cf) Object클래스는 모든 참조타입의 최상위 클래스이다. (상속관계)
+
+
+
+	//1)타입변수
+	 class Basket<T> {
+	    private T item;
+	
+	    public void setItem(T item) {
+	        this.item = item;
+	    }
+	    public T getItem() {
+	        return item;
+	    }
+	    //2) 제네릭 와일드 카드 
+	    public static void printBasket(Basket<?> basket){
+	        System.out.println("바구니의 과일은 " + basket.getItem() + "입니다");
+	    }
+	}
+
+	class Message<T> {
+	    private T message;
+	    T getMessage(){
+	        return message;
+	    }
+	}
+
+	public class B_Generic {
+	    public static void main(String[] args) {
+	        //데이터타입 = Object타입으로 업스케일링처럼 범위가 좁아진다
+	        Basket<String> stringBasket = new Basket<>(); //글자를 담는 바구니
+	        stringBasket.setItem("사과");
+	        System.out.println(stringBasket.getItem());
+
+	        Basket<Integer> integerBasket = new Basket<>(); //숫자를 담는 바구니
+	        integerBasket.setItem(123);
+	        System.out.println(integerBasket.getItem());
+
+	        //클래스형식인 ArrayList가 인터페이스인 List로   업스케일링
+	        List<String> arrays = new ArrayList();
+
+	        Basket.printBasket(stringBasket);
+	        Basket.printBasket(integerBasket);
+	
+	        Message<?> m1; //모든 타입의 Message 객체를 수용
+	        Message<String> m2;
+
+	        m1 = new Message<>(); //Object 타입의 Message 클래스를 사용 
+	        String s = (String) m1.getMessage();
+	        Boolean b = (Boolean) m1.getMessage();
+	        Character c = (Character) m1.getMessage();
+	    }
+	}
+
+
+
+
+
+
+
+=== Singleton 패턴 ===
+: 소프트웨어 설계 패턴 중 하나
+- 클래스의 인스턴스가 하나만 생성되도록 보장한다.
+- 해당 클래스의 인스턴스에 전역적 접근을 제공하지만 일관된 상태를 유지한다.
+
+1. 싱글톤 패턴의 사용 목적
+ 1) 객체의 유일성을 보장한다
+ 2) 자원을 절약한다.
+
+
+2. 싱글톤 패턴의 장단점
+ 1)장점
+    - 자원의 중복 생성을 방지하고, 메로리 사용을 최적화한다
+    - 전역 상태를 공유하여 통제된 접근을 요구한다
+ 2)단점
+    - 전역 상태를 관리하기때문에 다른 클래스에 영향을 미친다(결합의 가능성)
+    - 테스트가 어렵다
+ 
+
+	class Singleton {
+	    //클래스 타입 그 자체를 가지는 필드
+	    private static Singleton instance;
+	    //생성자를 private로 선언하여 외부에서 직접적인 인스턴스화가 불가능하다
+	    private Singleton() {};
+	    //전역 접근성을 제공하는 메서드 정의(인스턴스화 담당)
+	    public static Singleton getInstance() {
+	        if(instance == null) { //static 필드에 아무런 값이 없다면(한번도 인스턴스화를 하지 않았다면)
+	            instance = new Singleton(); // 인스턴스화를 진행
+	        }
+	        return instance;
+	    }
+	}
+
+	//교장 선생님 클래스
+	class SchoolPrincipal {
+	    //유일한 객체를 저장할 변수
+	    private static SchoolPrincipal instance;
+	    //1. 생성자를 private으로 만들어 다른 곳에서 객체 생성이 불가하도록 설정한다
+	    private SchoolPrincipal() {
+	        System.out.println("교장 선생님 객체 생성");
+	    }
+	    //2. getInstance() 메서드를 통해 객체를 제공
+	    public static SchoolPrincipal getInstance() {
+	        if(instance == null) { //객체를 생성하지 않았다면 객체생성
+	            instance = new SchoolPrincipal();
+	        }
+	        return instance; //객체를 이미 생성했다면 그대로 다시 반환
+	    }
+	    public void announce(){
+	        System.out.println("공부 열심히하시고 운동 열심히하시고 일찍 자고 일찍 일어나세요");
+	    }
+	}
+
+	public class D_Singleton {
+	    public static void main(String[] args) {
+	        SchoolPrincipal principal1 = SchoolPrincipal.getInstance();
+	        SchoolPrincipal principal2 = SchoolPrincipal.getInstance();
+	        //이미 객체가 생성되있다면 그대로 다시 반환되기에 참조 주소값이 같다.
+	        System.out.println(principal1);  //chapter13.SchoolPrincipal@3ac3fd8b
+	        System.out.println(principal2);  //chapter13.SchoolPrincipal@3ac3fd8b
+	        System.out.println(principal1 == principal2);  //true
+	    }
+	}
+
+
+
+
+
+
+
+
+
+
+=== 빌드 도구 === 
+1. 정의
+  소프트웨어 개발 과정에서 필요한 코드의
+  컴파일, 패키징, 테스트, 배포 등의 작업을 자동화하는 도구를 말한다.
+
+2. 종류
+  1) Maven
+    : Apache Software Foundation 회사에서 제공하는 빌드 도구
+    - XML 기반의 설정 파일을 사용한다 (pom.xml)
+    - 장점 : 간단하고 익숙한 도구, 널리 사용되는 도구 (커뮤니티성이 높고, 플러그인이 다양)
+      단점 : XML의 복잡한 구조로 설정이 길어진다
+
+  2) Gradle
+    : 오픈소스 기반의 빌드 도구
+    - Groovy 또는 Kotlin DSL을 이용한 설정 파일을 사용한다 (build.gradle)
+    - 장점 : 설정 파일이 간결하고, 다양한 언어와 프레임 워크를 지원한다, 대규모 프로젝트에서 사용된다.
+      단점 : 러닝 커브가 존재한다, 설정에 대한 과도한 자유도가 복잡성을 유발한다.
+
+
+
+
+Gradle 설치 후 하기
+=== 빌더(Builder) 패턴 ===
+1.빌더 패턴이란
+  : 객체 생성 방법 중 하나로, 복잡한 객체를 단계별로 만들 때 사용한다
+  - 필드(속성)가 많거나, 필수값과 선택값이 섞여있을 때 유용하다
+
+2.빌더 패턴의 장단점
+  1) 장점
+    - 가독성이 향상된다
+    - 유연성이 증가한다
+    - 확장성이 용이하다
+  2) 단점
+    - 구현 복잡성이 증가한다
+    - 작은 객체에는 부적합하다
+
+3.빌더 패턴의 사용처
+  - 생성자가 너무 많아질 때
+  - 코드가 복잡하고 읽기 어려울 때
+
+4.빌더 패턴의 동작원리
+  1) 객체를 생성하는데 필요한 데이터를 저장하는 Builder 클래스를 생성한다(해당 객체가 있는 클래스 내에 생성)
+  2) Builder 클래스는 원하는 속성을 단계별로 설정할 수 있는 메서드를 제공한다
+  3) build() 메서드를 호출하여 객체를 생성한다.
+
+  cf)선택값은 내부클래스에서 final 선언하지 않음
+     선택적 필드는 기본값 설정이 되어있다(추가하지 않으면 지정한다)
+
+
+	class Pizza {
+	    private final String menu; //종류
+	    private final String size; //크기
+	    private final boolean cheese; //선택사항
+	    private final boolean mushrooms; //선택사항
+	    private final boolean pepperoni; //선택사항
+
+	    //선택사항때문에 각 경우의 수 별로 생성자를 따로 만들어줘야해서 생성자가 많아진다
+	//  public Pizza(String menu, String size, boolean cheese, boolean mushrooms, boolean pepperoni) {
+	//        this.menu = menu;
+	//        this.size = size;
+	//        this.cheese = cheese;
+	//        this.mushrooms = mushrooms;
+	//        this.pepperoni = pepperoni;
+	//  }
+
+	    public static class Builder {
+	        private final String menu; //필수값은 final 선언함
+	        private final String size;
+	        private boolean cheese = false;  //선택값은 final 선언하지 않음
+	        private boolean mushrooms = false; //선택적 필드는 기본값 설정이 되어있다
+	        private boolean pepperoni = false; //(추가하지 않으면 지정한다)
+	
+	        //필수값 설정 - 생성자
+	        public Builder(String menu, String size){
+	            this.menu = menu;
+	            this.size = size;
+	        }
+	        //선택값 설정 -인스턴스 메서드
+	        public Builder addCheese(){
+	            this.cheese = true;
+	            return this;
+	        }
+	        public Builder addMushrooms(){
+	            this.mushrooms = true;
+	            return this;
+	        }
+	        public Builder addPepperoni(){
+	            this.pepperoni = true;
+	            return this;
+	        }
+        	 //만들어진 Builder의 인스턴스를 Pizza에 전달하는 build 메서드
+	        public Pizza build() {
+	            return new Pizza(this);
+	        }
+	    }
+    	// build 메서드 내에서 호출될 생성자 : Builder 패턴으로 만들어진 필드값들을 전달 받는 생성자
+	    private Pizza(Builder builder) {
+	        this.menu = builder.menu;
+	        this.size = builder.size;
+	        this.cheese = builder.cheese;
+	        this.mushrooms = builder.mushrooms;
+	        this.pepperoni = builder.pepperoni;
+	    }
+	}
+
+	public class E_Builder {
+	    public static void main(String[] args) {
+	        //기존에는 생성자에 맞춰 모든 값을 맞춰서 넣어야한다
+	        //Pizza noBuilderPizza = new Pizza("파인애플", "L", false, false, false);
+	
+	        //build의 경우 필수값만 입력하고, 선택사항은 불러온다.
+	        Pizza builderPizza = new Pizza.Builder("고구마 피자", "M")
+	                .build();
+	        Pizza builderPizza1 = new Pizza.Builder("포테이토 피자", "M")
+	                        .addCheese().build();
+	        Pizza builderPizza2 = new Pizza.Builder("쉬림프 피자", "M")
+	                .addPepperoni().addMushrooms().build(); //순서무관
+	    }
+	}
+
+
+
+
+
+
+
+롬복 설치 후 하기
+===Lombok===
+
+Lombok(롬복) 라이브러리
+ : 보일러플레이트(순차적) 코드를 줄여주는 라이브러리이다
+ - 어노테이션을 사용하여 코드를 간결하게 만들어준다.
+    cf)보일러플레이트 코드 : 프로그래밍에서 반복되는 작업이나 패턴에 대한 일종의 표준화된 코드
+
+1. @Getter /@Setter 어노테이션
+ : 필드에 대한 getter와 setter 메서드를 자동으로 생성해준다.
+
+2. @ToString 어노테이션
+ : 클래스의 toString() 메서드를 자동으로 구현한다
+ - sout(객체명)으로 작성하고 객체에 입력된 값을 출력한다.
+ - sout에 객체를 출력하는 경우 다음과 같이 출력된다.
+   클래스명(필드명1=필드값1, 필드명2=필드값2)
+
+3. 생성자 어노테이션
+ cf) 매개변수 = parameter(params), 인자 - argument(args)
+ 1) @NoArgsConstructor : 기본 생성자 - final있으면 불가
+ 2) @RequiredArgsConstructor : 필수 필드 생성자 - final에 주로 사용
+ 3) @AllArgsConstructor : 전체 필드 생성자
+
+4. @Data 어노테이션
+ : @Setter, @Getter, @ToString, @RequiredConstructor, @EqualsAndHashCode
+   5가지 어노테이션을 한번에 적용하는 어노테이션이다.
+
+5. @Builder 어노테이션
+ : 복잡한 객체를 생성할 때 사용하는 빌더 패턴을 자동으로 구현한다.
+ - @Builder 어노테이션을 사용하는 빌더 패턴의 경우 필드 값을 모두 메서드 체이닝으로 가져온다.
+    >> 클래스명.builder().build();
+ - 필수값을 builder()메서드의 인자로 받지 않는다.
+ - 메서드 체이닝 내에서 누락 시 오류가 난다.
+
+6. @NonNull
+ : 필드에 필수값을 지정한다.
+   null 값이 들어갈 수 없음을 의미한다
+    cf) (필드) final 키워드 - 참조 데이터타입의 기본값으로 null이 포함 가능하다
+
+
+	import lombok.*; //*는 전체를 의미하기에 라이브러리 전부를 들고왔다.
+	//import lombok.Getter; 등등 포함
+
+	//@Getter
+	//@Setter
+	//@ToString
+	//@RequiredArgsConstructor - @Date에 포함
+	@Data
+	@AllArgsConstructor
+	//@NoArgsConstructor - final이 있어서 불가
+	@Builder
+
+
+	class LombokClass{
+	    @NonNull
+	    private final String title; //final은 초기화 필요
+	    private String author;
+
+	//    public String getTitle() {return title;}  - Getter 어노테이션으로 대체
+	//    public String getAuthor() {return author;}
+
+	    // toSting() 메서드 : Object 객체 클래스 내의 메서드로 클래스 내의 데이터의 문자열을 출력한다
+	//    @Override
+	//    public String toString() { - ToString 어노테이션으로 대체
+	//        return "Title : " + title + "Author : " + author;
+	//    }
+	//    LombokClass(String title) { final의 초기화 선언
+	//        this.title = title;
+	//    }
+
+	    //Builder 클래스
+	    //: 프로젝트 전역적인 접근이 가능하다
+	//    public static class Builder { - Builder 어노테이션으로 대체
+	//        private final String title;
+	//        private String author = "작가 미상";
+	//        //빌더 클래스의 인자 - 필수 필드값
+	//        public Builder(String title) {
+	//            this.title = title;
+	//        }
+	//        //선택 필드값 설정을 위한 메서드
+	//        public Builder author(String author){
+	//            this.author = author;
+	//            return this;
+	//        }
+	//        //만들어진 Builder의 인스턴스를 LombokClass에 전달하는 build 메서드
+	//        public LombokClass build() {
+	//            return new LombokClass(this);
+	//        }
+	//    }
+	//    // build 메서드 내에서 호출될 생성자
+	//    // : Builder 패턴으로 만들어진 필드값들을 전달 받는 생성자
+	//    public LombokClass(Builder builder) {
+	//        this.title = builder.title;
+	//        this.author = builder.author;
+	//    }
+	}
+
+	public class H_Lombok {
+	    public static void main(String[] args) {
+	        LombokClass lombokClass1 = new LombokClass("Hello","LSA");
+	        //lombokClass1.setTitle("안녕"); fianl로 인해  재할당 불가
+	        lombokClass1.setAuthor("이승아");
+
+	        LombokClass lombokClass2 = new LombokClass("Medal", "gold");
+	        //lombokClass2.setTitle("메달"); fianl로 인해  재할당 불가
+	        lombokClass2.setAuthor("금");
+
+	        System.out.println(lombokClass1); //LombokClass(title=Hello, author=이승아)
+	        System.out.println(lombokClass2); //LombokClass(title=Medal, author=금)
+
+	        //정적내부 클래스 : 클래스명.내부클래스()
+	//        LombokClass lombokClass3 = new LombokClass.Builder("노는게 제일 좋아")
+	//                .build();
+	//        System.out.println(lombokClass3.getAuthor()); //작가미상
+	//        LombokClass lombokClass4 = new LombokClass.Builder("뽀로롱")
+	//                .author("루피").build();
+	//        System.out.println(lombokClass4.getAuthor());
+
+	        LombokClass lombokClass3 = LombokClass.builder()
+	                .title("노는게 제일 좋아").build();
+	        System.out.println(lombokClass3.getAuthor()); //작가미상
+	
+	        // @NonNull 어노테이션 필드는 반드시 생성 시 값의 할당이 이루어져야한다.
+	        LombokClass lombokClass4 = LombokClass.builder()
+	                .title("뽀로롱").author("루피").build();
+	        System.out.println(lombokClass4.getTitle());
+	        System.out.println(lombokClass4.getAuthor());
+	    }
+	}
+
+
+
+
+
