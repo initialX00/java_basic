@@ -52,5 +52,6 @@ public class C_Anonymous { //anonymous : 익명의
         System.out.println(student4.getName() +"의 성적 : " + grading.calculateGrade(student4));
         System.out.println(student5.getName() +"의 성적 : " + grading.calculateGrade(student5));
         System.out.println(student6.getName() +"의 성적 : " + grading.calculateGrade(student6));
+
     }
 }

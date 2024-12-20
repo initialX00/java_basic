@@ -55,7 +55,7 @@ interface  Operation{
     void operation(int a, int b);
 }
 
-//5)반환값이 있는 경우
+//5)반환값이 있는 경우  : 리턴과 중괄호 생략가능
 @FunctionalInterface
 interface StringLength {
     int getLength(String str);
@@ -77,22 +77,22 @@ public class D_Lambda {
         System.out.println("익명클래스 결과 : " + calculator1.add(3, 5)); //익명클래스 결과 : 8
 
         //람다식 방식
-        //1)기본방식
+        //1)기본방식 : 여러개의 매개변수, 하나의 실행문
         Calculator calculator2 = (a, b) -> a + b;
         System.out.println("람다식 결과 : " + calculator2.add(3, 5)); //람다식 결과 : 8
 
         //2)매개변수가 없는 방식
         NoParams noParams = () -> System.out.println("안녕하세요");
-        //3)매개변수가 한개인 방식
+        //3)매개변수가 한개인 방식 : 소괄호 생략 가능
         OneParam oneParam =  message -> System.out.println("출력메세지 : " + message);
         oneParam.print("안녕"); //출력메세지 : 안녕
-        //4)출력문이 여러줄인 방식
+        //4)출력문이 여러줄인 방식 : 중괄호 작성
         Operation operation = (a, b) -> {
             System.out.println("합 : " + (a + b)); //합 : 3
             System.out.println("차 : " + (a - b));  //차 : -1
         };
         operation.operation(1, 2);
-        //5)반환값이 있는경우
+        //5)반환값이 있는경우 : 리턴과 중괄호 생략가능
         StringLength stringLength =  str -> str.length();
         System.out.println("문자열 길이 : " + stringLength.getLength("Lambda")); //문자열 길이 : 6
         //cf)여러 줄의 코드가 실행문에 작성될 경우 return 필요
