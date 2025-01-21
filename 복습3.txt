@@ -1,0 +1,69 @@
+
+#
+참조자료형은 주소가 저장되고, 주소는 마지막 8바이트로 표현된다.
+클래스의 변수는 자동으로 선언된다. 함수의 변수는 직접선언해줘야한다.
+
+#
+xml, json은 코드를 문자열로 변환해준다
+Reader가 문자열 전체 불러온다
+Buffere가 줄바꿈 단위로 읽는다.
+
+
+#제네릭
+boxing, unboxing
+boxing: 기본자료형 데이터를 참조자료형으로 변환해주는것
+Integer i = 10; 오토박싱에 의해
+Integer i = new Integer(10);과 같다.
+모든 자료형의 최상위 클래스는 object이다.
+object를 가변적으로 나타낸것이 제네릭이다.
+
+
+#connection
+자바에서 데이터베이스의 자료를 받아오는것.
+데이터베이스 자료 및 서버가 잘 못 되어 에러가 날 수 있기에, 런타임 예외처리를 해줘야한다.
+prepareStatement에는 sql문을 적는다
+set을 통해 미완성된 prepareStatement를 채워넣는다.
+excute - ture,false
+excuteUpdate - int
+excuteQuarry - 객체
+ResultSet으로 테이블을 들고와서 rs.next()로 1행씩 확인한다.
+
+
+
+#구조, 3 레이어
+ㅇ프레젠테이션 : 요청응답처리
+  - 톰켓, 필터, 서블렛(리액트에서 JSON을 받아 -> DTO로 변환)
+ 
+ㅇ서비스 : 연산
+  - DTO -> Entity (Entity : 테이블과 같은 양식),
+    응답시에는 Entity를 거치지 않고 DTO로 준다(엔티티에서 필요없는 데이터를 거르기 위해)
+
+ㅇ데미터베이스 : Entity형식으로 저장
+  - DAO(database acesse object), Repository, Mapper
+
+ㅇDBMS : 데이터베이스의 관리, 데이터베이스와 단절되어있지만 JDBC로 연결
+  - JDBC
+
+
+
+
+#Optional
+객체가 null인 경우 예외처리를 해줘야하는데, Optional은 이를 처리해준다.
+
+
+#Promise
+함수를 비동기로 호출하는 함수
+
+
+
+#HTTP
+리소스 url(주소), uri(서버)
+메서드 get(조회(db의 select)), post(생성(db의 insert), put(수정(db의 update)), delete(삭제(db의 delete))
+
+세션(state방식) - 세션아이디를 사용, 데이터가 서버에 저장, 보안성 우수
+토큰(stateless방식) - 암호화된 데이터를 사용, 데이터가 클라이언트에 저장, 속도 우수
+
+토큰의 보안성을 보완하기위해 id값만 저장하거나 리프레쉬토큰이나 액세스토큰을 사용한다.
+
+
+ 
