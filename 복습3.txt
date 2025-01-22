@@ -31,18 +31,28 @@ ResultSet으로 테이블을 들고와서 rs.next()로 1행씩 확인한다.
 
 
 #구조, 3 레이어
-ㅇ프레젠테이션 : 요청응답처리
-  - 톰켓, 필터, 서블렛(리액트에서 JSON을 받아 -> DTO로 변환)
- 
-ㅇ서비스 : 연산
-  - DTO -> Entity (Entity : 테이블과 같은 양식),
-    응답시에는 Entity를 거치지 않고 DTO로 준다(엔티티에서 필요없는 데이터를 거르기 위해)
+ㅇ클라이언트
+  - react 
 
-ㅇ데미터베이스 : Entity형식으로 저장
+ ↑JSON↓
+
+ㅇ프레젠테이션 : 요청응답처리
+  - 서블렛(톰켓, 필터)
+ 
+ ↑DTO↓
+
+ㅇ서비스 : 연산 
+  - 응답시에는 Entity를 거치지 않고 DTO로 준다(엔티티에서 필요없는 데이터를 거르기 위해)
+
+ ↑Entity↓
+
+ㅇ데미터베이스 : Entity형식으로 저장 (Entity : 테이블과 같은 양식)
   - DAO(database acesse object), Repository, Mapper
 
+ ↑JDBC↓
+
 ㅇDBMS : 데이터베이스의 관리, 데이터베이스와 단절되어있지만 JDBC로 연결
-  - JDBC
+  - mysql
 
 
 
